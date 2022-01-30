@@ -1,9 +1,15 @@
 import axios from "axios";
 
+interface User {
+    email: string,
+    fullName: string,
+    roles: string
+}
+
 const API_URL = 'https://localhost:7025/api/User';
 class AuthService {
 
-    login(email: string, password: string) {
+    async login(email: string, password: string) {
         const body = {
             Email: email,
             Password: password
@@ -21,7 +27,7 @@ class AuthService {
                 switch (response.data.responseCode) {
                     case 1:
                         if (response.data.dataSet.token) {
-                            localStorage.setItem("user", response.data.dataSet.email);
+                            localStorage.setItem("email", response.data.dataSet.email);
                             localStorage.setItem('fullName', response.data.dataSet.fullName);
                             localStorage.setItem('token', response.data.dataSet.token);
                             localStorage.setItem("roles", response.data.dataSet.roles);
@@ -66,6 +72,16 @@ class AuthService {
 
     get getCurrentUser() {
         return localStorage.getItem('user');
+    }
+
+    get getUser(): User {
+        const user: User = {
+            email: localStorage.getItem('email')!,
+            fullName: localStorage.getItem('fullName')!,
+            roles: localStorage.getItem('roles')!
+        }
+
+        return user;
     }
 
     get getRoles() {

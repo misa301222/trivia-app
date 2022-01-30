@@ -7,7 +7,7 @@ function NavBar() {
         <nav className="flex items-center justify-between flex-wrap bg-zinc-900 p-6 shadow-lg shadow-black/50">
             <div className="w-44 flex justify-evenly items-center">
                 {/* <svg className="fill-current h-8 w-8 mr-2" width="54" height="54" viewBox="0 0 54 54" xmlns="http://www.w3.org/2000/svg"><path d="M13.5 22.1c1.8-7.2 6.3-10.8 13.5-10.8 10.8 0 12.15 8.1 17.55 9.45 3.6.9 6.75-.45 9.45-4.05-1.8 7.2-6.3 10.8-13.5 10.8-10.8 0-12.15-8.1-17.55-9.45-3.6-.9-6.75.45-9.45 4.05zM0 38.3c1.8-7.2 6.3-10.8 13.5-10.8 10.8 0 12.15 8.1 17.55 9.45 3.6.9 6.75-.45 9.45-4.05-1.8 7.2-6.3 10.8-13.5 10.8-10.8 0-12.15-8.1-17.55-9.45-3.6-.9-6.75.45-9.45 4.05z" /></svg> */}
-                <Link to="/"><span className="font-semibold text-2xl tracking-tight text-cyan-500 ease-in-out duration-300 hover:text-orange-500 hover:text-3xl">TriviaApp <FontAwesomeIcon icon={faBook}/></span></Link>
+                <Link to="/"><span className="font-semibold text-2xl tracking-tight text-cyan-500 ease-in-out duration-300 hover:text-orange-500 hover:text-3xl">TriviaApp <FontAwesomeIcon icon={faBook} /></span></Link>
             </div>
             <div className="block lg:hidden">
                 <button className="flex items-center px-3 py-2 border rounded text-teal-200 border-teal-400 hover:text-white hover:border-white">
@@ -18,10 +18,13 @@ function NavBar() {
                 <div className="text-sm lg:flex-grow">
                     <Link to="/login" className="block mt-4 font-bold shadow-lg shadow-black/50 px-4 py-2 border-0 rounded text-white bg-cyan-800 hover:bg-cyan-600 lg:inline-block lg:mt-0 ease-in-out duration-300 hover:scale-125 mr-4">
                         Login
-                    </Link>                    
+                    </Link>
+                    <Link to="/dashboard" className="block mt-4 font-bold shadow-lg shadow-black/50 px-4 py-2 border-0 rounded text-white bg-cyan-800 hover:bg-cyan-600 lg:inline-block lg:mt-0 ease-in-out duration-300 hover:scale-125 mr-4">
+                        DashBoard
+                    </Link>
                     <Link to="/logout" className="block mt-4 font-bold shadow-lg shadow-black/50 px-4 py-2 border-0 rounded text-white bg-cyan-800 hover:bg-cyan-600 lg:inline-block lg:mt-0 ease-in-out duration-300 hover:scale-125 mr-4">
                         Logout
-                    </Link>                    
+                    </Link>
                 </div>
             </div>
         </nav>

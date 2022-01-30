@@ -12,6 +12,9 @@ body {
   color: white;
 }
 
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
 @layer base {
   h1 {
     @apply text-5xl;
@@ -25,6 +28,16 @@ body {
   }
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+@layer components {
+  .btn-primary {
+    @apply disabled:opacity-75 disabled:bg-blue-900 bg-blue-900 ease-in-out duration-300 hover:bg-slate-900 w-36 h-10 font-bold shadow-lg shadow-black/50 rounded-lg;
+  }
+
+  .form-control {
+    @apply shadow-lg w-6/12 shadow-black/50 border-0 rounded py-2 px-3 bg-zinc-900 text-slate-300 focus:outline-none font-bold;
+  }
+
+  .option-style {
+    @apply bg-white/90 rounded-lg border-black border-2 text-black p-2 cursor-pointer ease-in-out duration-300 hover:bg-cyan-700 hover:text-white/90;
+  }
 }

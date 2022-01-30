@@ -6,7 +6,7 @@ import Questions from '../../resources/images/Questions.jpg';
 function Home() {
 
     useEffect(() => {
-        console.log(localStorage.getItem('isLoggedIn'));
+        console.log("Is Logged In?: " + localStorage.getItem('isLoggedIn'));
     }, []);
 
     return (
