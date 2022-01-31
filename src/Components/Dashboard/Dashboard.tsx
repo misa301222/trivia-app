@@ -6,6 +6,7 @@ import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import authService from "../../Services/auth.service";
+import UserCard from "../UserCard/UserCard";
 
 interface User {
     email: string,
@@ -150,31 +151,17 @@ function Dashboard() {
                             <h5 className="text-neutral-200">Manage Your Own Room questions!</h5>
                         </div>
                     </Link>
+
+                    <Link to="/seeScores">
+                        <div className="h-20 bg-neutral-900 rounded-lg flex flex-col mb-10 ease-in-out duration-300 cursor-pointer hover:scale-110">
+                            <h2 className="font-bold text-neutral-300">See Scores</h2>
+                            <h5 className="text-neutral-200">See your past scores!</h5>
+                        </div>
+                    </Link>
                 </div>
 
                 <div className="container h-full flex flex-col pl-36">
-                    <div className="bg-neutral-900 h-80 w-4/5 mt-10 rounded-lg shadow-cyan-500/50 shadow-lg transition duration-700 hover:shadow-orange-500/50 hover:scale-110">
-                        <div className="flex flex-row">
-                            <div className="h-40 w-full flex flex-row">
-                                <div className="flex flex-col w-1/4 text-white">
-                                    <img src={userProfile?.imageURL} className="rounded-lg" />
-                                </div>
-
-                                <div className="flex flex-col w-full mt-3 pl-5">
-                                    <div>
-                                        <h5 className="text-left font-bold text-2xl text-slate-300">{user?.fullName}</h5>
-                                    </div>
-                                    <div>
-                                        <h5 className="text-left font-bold text-lg text-slate-200">{user?.email}</h5>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="flex flex-row h-40 w-full">
-                            2nd row
-                        </div>
-                    </div>
+                    <UserCard userProfile={userProfile} user={user} />
                 </div>
             </div>
 

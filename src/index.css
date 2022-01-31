@@ -30,7 +30,7 @@ code {
 
 @layer components {
   .btn-primary {
-    @apply disabled:opacity-75 disabled:bg-blue-900 bg-blue-900 ease-in-out duration-300 hover:bg-slate-900 w-36 h-10 font-bold shadow-lg shadow-black/50 rounded-lg;
+    @apply disabled:opacity-75 disabled:bg-blue-900 bg-blue-900 ease-in-out text-slate-100 duration-300 hover:text-slate-300 hover:bg-slate-900 w-36 h-10 font-bold shadow-lg shadow-black/50 rounded-lg;
   }
 
   .form-control {
@@ -38,6 +38,10 @@ code {
   }
 
   .option-style {
-    @apply bg-white/90 rounded-lg border-black border-2 text-black p-2 cursor-pointer ease-in-out duration-300 hover:bg-cyan-700 hover:text-white/90;
+    @apply bg-white/90 rounded-lg border-black border-2 text-black p-2 cursor-pointer ease-in-out duration-300 hover:bg-amber-400 hover:text-white/90;
+  }
+
+  .badge {
+    @apply inline-flex items-center justify-center px-2 py-1 mr-2 text-xs font-bold leading-none text-slate-300 bg-cyan-900 rounded-full;
   }
 }

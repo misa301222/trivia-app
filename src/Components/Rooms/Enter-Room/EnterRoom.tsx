@@ -19,7 +19,8 @@ interface Question {
 interface UserAnswers {
     question: string,
     answer: string,
-    isRight: boolean
+    isRight: boolean,
+    userScoreId: number
 }
 
 interface UserScore {
@@ -33,6 +34,7 @@ interface UserScore {
 
 const QuestionURL = 'https://localhost:7025/api/Questions';
 const UserScoreURL = 'https://localhost:7025/api/UserScores';
+const UserAnswersURL = 'https://localhost:7025/api/UserAnswers';
 
 function EnterRoom() {
     const { generatedName } = useParams();
@@ -66,7 +68,8 @@ function EnterRoom() {
         newElement = {
             question: currentQuestion?.questionName!,
             answer: selectedAnswer,
-            isRight: false
+            isRight: false,
+            userScoreId: 0
         }
         console.log(userAnswers);
         setUserAnswers(prev => [...prev, newElement]);
@@ -81,7 +84,7 @@ function EnterRoom() {
             setIsFinished(true);
             let userAnswersFinal: UserAnswers[] = userAnswers;
             userAnswersFinal.push(newElement);
-            calculateScore(userAnswersFinal);
+            await calculateScore(userAnswersFinal);
         }
     }
 
@@ -113,9 +116,23 @@ function EnterRoom() {
             }
             setUserAnswers(userAnswersFinal);
             // console.log(finalScore);
+            let userScoreId: number;
             await axios.post(`${UserScoreURL}`, finalScore).then(response => {
+                console.log('dataa');
+                console.log(response.data);
                 setUserScore(response.data);
+                userScoreId = response.data.userScoreId;
+                console.log('finaaaaaaal');
             });
+
+            console.log('id: ' + userScoreId!);
+            for (let i = 0; i < userAnswersFinal.length; i++) {
+                userAnswersFinal[i].userScoreId = userScoreId!;
+                await axios.post(`${UserAnswersURL}/`, userAnswersFinal[i]).then(response => {
+                    console.log(response);
+                });
+            }
+
         }
     }
 
@@ -165,46 +182,65 @@ function EnterRoom() {
                                                 <h1 className="font-bold">{currentQuestion?.questionName}</h1>
                                             </div>
 
-                                            <div className="text-slate-300" onClick={() => setSelectedAnswer(currentQuestion ? currentQuestion.firstOption : '')}>
-                                                <div className="option-style">
+                                            <motion.div whileTap={{
+                                                scale: 1.1
+                                            }}
+                                                className='text-slate-300' onClick={() => setSelectedAnswer(currentQuestion ? currentQuestion.firstOption : '')}>
+                                                <div
+                                                    className={`option-style ${selectedAnswer === currentQuestion?.firstOption ? 'bg-amber-500 text-emerald-900' : ''}`}>
                                                     <h2 className="font-bold">{currentQuestion?.firstOption}</h2>
                                                 </div>
-                                            </div>
+                                            </motion.div>
 
-                                            <div className="text-slate-300" onClick={() => setSelectedAnswer(currentQuestion ? currentQuestion.secondOption : '')}>
-                                                <div className="option-style">
+                                            <motion.div whileTap={{
+                                                scale: 1.1
+                                            }}
+                                                className="text-slate-300" onClick={() => setSelectedAnswer(currentQuestion ? currentQuestion.secondOption : '')}>
+                                                <div className={`option-style ${selectedAnswer === currentQuestion?.secondOption ? 'bg-amber-500 text-emerald-900' : ''}`}>
                                                     <h2 className="font-bold">{currentQuestion?.secondOption}</h2>
                                                 </div>
-                                            </div>
+                                            </motion.div>
 
-                                            <div className="text-slate-300" onClick={() => setSelectedAnswer(currentQuestion ? currentQuestion.thirdOption : '')}>
-                                                <div className="option-style">
+                                            <motion.div whileTap={{
+                                                scale: 1.1
+                                            }}
+                                                className="text-slate-300" onClick={() => setSelectedAnswer(currentQuestion ? currentQuestion.thirdOption : '')}>
+                                                <div className={`option-style ${selectedAnswer === currentQuestion?.thirdOption ? 'bg-amber-500 text-emerald-900' : ''}`}>
                                                     <h2 className="font-bold">{currentQuestion?.thirdOption}</h2>
                                                 </div>
-                                            </div>
+                                            </motion.div>
 
-                                            <div className="text-slate-300" onClick={() => setSelectedAnswer(currentQuestion ? currentQuestion.fourthOption : '')}>
-                                                <div className="option-style">
+                                            <motion.div whileTap={{
+                                                scale: 1.1
+                                            }}
+                                                className="text-slate-300" onClick={() => setSelectedAnswer(currentQuestion ? currentQuestion.fourthOption : '')}>
+                                                <div className={`option-style ${selectedAnswer === currentQuestion?.fourthOption ? 'bg-amber-500 text-emerald-900' : ''}`}>
                                                     <h2 className="font-bold">{currentQuestion?.fourthOption}</h2>
                                                 </div>
-                                            </div>
+                                            </motion.div>
 
                                             {
                                                 currentQuestion?.fifthOption ?
-                                                    <div className="text-slate-300" onClick={() => setSelectedAnswer(currentQuestion ? currentQuestion.fifthOption : '')}>
-                                                        <div className="option-style">
+                                                    <motion.div whileTap={{
+                                                        scale: 1.1
+                                                    }}
+                                                        className="text-slate-300" onClick={() => setSelectedAnswer(currentQuestion ? currentQuestion.fifthOption : '')}>
+                                                        <div className={`option-style ${selectedAnswer === currentQuestion.fifthOption ? 'bg-amber-500 text-emerald-900' : ''}`}>
                                                             <h2 className="font-bold">{currentQuestion.fifthOption}</h2>
                                                         </div>
-                                                    </div>
+                                                    </motion.div>
                                                     : null
                                             }
 
                                             {currentQuestion?.sixthOption ?
-                                                <div className="text-slate-300" onClick={() => setSelectedAnswer(currentQuestion ? currentQuestion.sixthOption : '')}>
-                                                    <div className="option-style">
+                                                <motion.div whileTap={{
+                                                    scale: 1.1
+                                                }}
+                                                    className="text-slate-300" onClick={() => setSelectedAnswer(currentQuestion ? currentQuestion.sixthOption : '')}>
+                                                    <div className={`option-style ${selectedAnswer === currentQuestion.sixthOption ? 'bg-amber-500 text-emerald-900' : ''}`}>
                                                         <h2 className="font-bold">{currentQuestion.sixthOption}</h2>
                                                     </div>
-                                                </div>
+                                                </motion.div>
                                                 : null
                                             }
                                         </div>
@@ -260,8 +296,7 @@ function EnterRoom() {
                                 <button disabled={!selectedAnswer} onClick={async () => acceptAnswer()} className="btn-primary mt-20">Next Question</button>
                                 :
                                 <Link to={{
-                                    pathname: '/results',
-
+                                    pathname: '/seeResults',
                                 }}
                                     state={{
                                         userAnswersProps: userAnswers,

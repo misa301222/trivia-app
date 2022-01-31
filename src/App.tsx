@@ -11,7 +11,8 @@ import Dashboard from './Components/Dashboard/Dashboard';
 import SeeRooms from './Components/Rooms/See-Rooms/SeeRooms';
 import EnterRoom from './Components/Rooms/Enter-Room/EnterRoom';
 import ManageQuestions from './Components/Manage-Questions/ManageQuestions';
-import Results from './Components/Results/Results';
+import SeeScores from './Components/See-Scores/SeeScores';
+import SeeResults from './Components/See-Results/SeeResults';
 
 function App() {
   const location = useLocation();
@@ -33,7 +34,8 @@ function App() {
             <Route path="/dashboard" element={<RequireAuth redirectTo='/login'><div className='page'><Dashboard /></div></RequireAuth>}></Route>
             <Route path="/seeRooms" element={<RequireAuth redirectTo='/login'><div className='page'><SeeRooms /></div></RequireAuth>}></Route>
             <Route path="/enterRoom/:generatedName/:roomId" element={<RequireAuth redirectTo='/login'><div className='page'><EnterRoom /></div></RequireAuth>}></Route>
-            <Route path="/results" element={<RequireAuth redirectTo='/login'><div className='page'><Results /></div></RequireAuth>}></Route>
+            <Route path="/seeResults" element={<RequireAuth redirectTo='/login'><div className='page'><SeeResults /></div></RequireAuth>}></Route>
+            <Route path="/seeScores" element={<RequireAuth redirectTo='/login'><div className='page'><SeeScores /></div></RequireAuth>}></Route>
             <Route path="/manageQuestions" element={<RequireAuth redirectTo='/login'><div className='page'><ManageQuestions /></div></RequireAuth>}></Route>
             <Route path="/logout" element={<div ref={nodeRef} className='page'><Logout /></div>}></Route>
           </Routes>

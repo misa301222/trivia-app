@@ -95,18 +95,27 @@ function ManageQuestions() {
 
     const handleOnSubmitFormEdit = async (event: SyntheticEvent) => {
         event.preventDefault();
-        await axios.put(`${QuestionURL}/${editQuestion.questionId}`, editQuestion).then(response => {
-            console.log(response.data);
-            Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'Question Edited Succesfully!!!',
-                showConfirmButton: false,
-                timer: 900
-            });
-        });
+        if (currentRoom) {
+            let question: Question = newQuestion;
+            question.roomId = currentRoom.roomId;
 
-        
+            await axios.put(`${QuestionURL}/${editQuestion.questionId}`, editQuestion).then(response => {
+                console.log(response.data);
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Question Edited Succesfully!!!',
+                    showConfirmButton: false,
+                    timer: 900
+                }).then(() => {
+                    setShowEditModal(false);
+                });
+            });
+
+            await axios.get(`${QuestionURL}/GetQuestionsByRoomId/${currentRoom.roomId}`).then(response => {
+                setCurrentQuestions(response.data);
+            });
+        }
     }
 
     const variants = {
@@ -185,22 +194,70 @@ function ManageQuestions() {
     const handleQuestionFormSubmit = async (event: SyntheticEvent) => {
         event.preventDefault();
         if (currentRoom) {
-            let question: Question = newQuestion;
-            question.roomId = currentRoom.roomId;
 
-            await axios.post(`${QuestionURL}`, question).then(response => {
-                console.log(response.data);
+            //CHECK IF ANSWERS IS IN OPTIONS            
+            let answer: string = newQuestion.answer;
+            if (answer === newQuestion.firstOption || answer === newQuestion.secondOption || answer === newQuestion.thirdOption ||
+                answer === newQuestion.fourthOption || answer === newQuestion.fifthOption || answer === newQuestion.sixthOption) {
+                let question: Question = newQuestion;
+                question.roomId = currentRoom.roomId;
+
+                await axios.post(`${QuestionURL}`, question).then(response => {
+                    console.log(response.data);
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'Question created!',
+                        showConfirmButton: false,
+                        timer: 900
+                    }).then(() => {
+                        setShow(false);
+                    });
+                });
+
+                await axios.get(`${QuestionURL}/GetQuestionsByRoomId/${currentRoom.roomId}`).then(response => {
+                    setCurrentQuestions(response.data);
+                });
+            } else {
                 Swal.fire({
                     position: 'center',
-                    icon: 'success',
-                    title: 'Question created!',
-                    showConfirmButton: false,
-                    timer: 900
-                });
-            });
+                    icon: 'error',
+                    title: 'Anser is not in options!',
+                    showConfirmButton: true,
+                }); 
+            }
+        }
+    }
 
-            await axios.get(`${QuestionURL}/GetQuestionsByRoomId/${currentRoom.roomId}`).then(response => {
-                setCurrentQuestions(response.data);
+
+    const handleOnClickDeleteQuesiton = async (element: Question) => {
+        const elementId: number = element.questionId;
+
+        if (currentRoom) {
+            let question: Question = newQuestion;
+            question.roomId = currentRoom.roomId;
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    await axios.delete(`${QuestionURL}/${elementId}`).then(response => {
+                        Swal.fire(
+                            'Deleted!',
+                            'Your file has been deleted.',
+                            'success'
+                        );
+                    });
+                }
+
+                await axios.get(`${QuestionURL}/GetQuestionsByRoomId/${currentRoom.roomId}`).then(response => {
+                    setCurrentQuestions(response.data);
+                });
             });
         }
     }
@@ -311,7 +368,7 @@ function ManageQuestions() {
 
                                         <td>
                                             <button onClick={() => handleOpenEditModal(element)} className="bg-yellow-600 p-1 rounded-lg m-2 w-9 ease-in-out duration-300 hover:bg-yellow-300"><FontAwesomeIcon icon={faPencilAlt} /></button>
-                                            <button className="bg-red-700 p-1 rounded-lg m-2 w-9 ease-in-out duration-300 hover:bg-red-500"><FontAwesomeIcon icon={faTrashAlt} /></button>
+                                            <button onClick={() => handleOnClickDeleteQuesiton(element)} className="bg-red-700 p-1 rounded-lg m-2 w-9 ease-in-out duration-300 hover:bg-red-500"><FontAwesomeIcon icon={faTrashAlt} /></button>
                                         </td>
                                     </tr>
                                 ))
