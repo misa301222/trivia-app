@@ -22,6 +22,9 @@ function NavBar() {
                     <Link to="/dashboard" className="block mt-4 font-bold shadow-lg shadow-black/50 px-4 py-2 border-0 rounded text-white bg-cyan-800 hover:bg-cyan-600 lg:inline-block lg:mt-0 ease-in-out duration-300 hover:scale-125 mr-4">
                         DashBoard
                     </Link>
+                    <Link to="/searchUsers" className="block mt-4 font-bold shadow-lg shadow-black/50 px-4 py-2 border-0 rounded text-white bg-cyan-800 hover:bg-cyan-600 lg:inline-block lg:mt-0 ease-in-out duration-300 hover:scale-125 mr-4">
+                        Users
+                    </Link>
                     <Link to="/logout" className="block mt-4 font-bold shadow-lg shadow-black/50 px-4 py-2 border-0 rounded text-white bg-cyan-800 hover:bg-cyan-600 lg:inline-block lg:mt-0 ease-in-out duration-300 hover:scale-125 mr-4">
                         Logout
                     </Link>

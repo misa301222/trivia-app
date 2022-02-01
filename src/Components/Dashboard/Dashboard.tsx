@@ -31,6 +31,8 @@ interface UserProfile {
 
 const RoomURL = 'https://localhost:7025/api/Rooms';
 const UserProfileURL = 'https://localhost:7025/api/UserProfiles';
+const UserScoreURL = 'https://localhost:7025/api/UserScores';
+
 function Dashboard() {
     const [user, setUser] = useState<User | null>();
     const [show, setShow] = useState<boolean>(false);
@@ -38,6 +40,9 @@ function Dashboard() {
     const [joinRoomName, setJoinRoomName] = useState<string>();
     const [lastRoomCreated, setLastRoomCreated] = useState<Room>();
     const [userProfile, setUserProfile] = useState<UserProfile>();
+    const [totalScore, setTotalScore] = useState<number>(0);
+    const [totalCorrect, setTotalCorrect] = useState<number>(0);
+    const [totalWrong, setTotalWrong] = useState<number>(0);
     const navigate = useNavigate();
 
     const createNewRoom = async () => {
@@ -100,12 +105,27 @@ function Dashboard() {
             console.log(response.data);
             setUserProfile(response.data);
         });
+    }    
+
+    const getDetailedInfo = async (email: string) => {
+        await axios.get(`${UserScoreURL}/GetTotalScoreByEmail/${email}`).then(response => {
+            setTotalScore(response.data);
+        });
+
+        await axios.get(`${UserScoreURL}/GetTotalCorrectByEmail/${email}`).then(response => {
+            setTotalCorrect(response.data);
+        });
+
+        await axios.get(`${UserScoreURL}/GetTotalWrongEmail/${email}`).then(response => {
+            setTotalWrong(response.data);
+        });
     }
 
     useEffect(() => {
         let user: User = authService.getUser;
         setUser(user);
         getUserProfileInfo(user.email);
+        getDetailedInfo(user.email);
     }, []);
 
     return (
@@ -158,10 +178,17 @@ function Dashboard() {
                             <h5 className="text-neutral-200">See your past scores!</h5>
                         </div>
                     </Link>
+
+                    <Link to="/config">
+                        <div className="h-20 bg-neutral-900 rounded-lg flex flex-col mb-10 ease-in-out duration-300 cursor-pointer hover:scale-110">
+                            <h2 className="font-bold text-neutral-300">Config</h2>
+                            <h5 className="text-neutral-200">...</h5>
+                        </div>
+                    </Link>
                 </div>
 
                 <div className="container h-full flex flex-col pl-36">
-                    <UserCard userProfile={userProfile} user={user} />
+                    <UserCard userProfile={userProfile} user={user} totalScore={totalScore} totalCorrect={totalCorrect} totalWrong = {totalWrong} />
                 </div>
             </div>
 

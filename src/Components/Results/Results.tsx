@@ -1,8 +1,6 @@
-import { faCheck, faCheckDouble, faPollH, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faCheckDouble, faPollH } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import moment from "moment";
-import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
 
 interface Question {
     questionName: string,
@@ -16,26 +14,11 @@ interface Question {
     roomId: number
 }
 
-interface UserAnswers {
-    question: string,
-    answer: string,
-    isRight: boolean
-}
-
-interface UserScore {
-    generatedName: string,
-    email: string,
-    correct: number,
-    wrong: number,
-    score: number,
-    dateSent: Date
-}
-
 function Results({ questionsFinal, userAnswersFinal, userScoreFinal }: any) {
     return (
         <div className="container">
             <h1 className="mt-16">Results <FontAwesomeIcon icon={faPollH} /> </h1>
-            <h5 className="font-bold mt-10 text-slate-200">Sent on <u>{userScoreFinal?.dateSent ? `${moment(userScoreFinal).format('MM/DD/YYYY')} at ${moment(userScoreFinal).format('HH:mm')}` : null}</u></h5>
+            <h5 className="font-bold mt-10 text-slate-200">Sent on <u>{userScoreFinal?.dateSent ? `${moment(userScoreFinal).format('MM/DD/YYYY')} at ${moment(userScoreFinal).format('hh:mm')}` : null}</u></h5>
             <div className="container">
                 {
                     questionsFinal?.map((element: Question, index: number) => (

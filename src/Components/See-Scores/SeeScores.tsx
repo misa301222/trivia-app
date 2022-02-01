@@ -57,6 +57,7 @@ const QuestionURL = 'https://localhost:7025/api/Questions';
 const UserScoresURL = 'https://localhost:7025/api/UserScores';
 const UserProfileURL = 'https://localhost:7025/api/UserProfiles';
 const UserAnswersURL = 'https://localhost:7025/api/UserAnswers';
+const UserScoreURL = 'https://localhost:7025/api/UserScores';
 
 function SeeScores() {
     let navigate = useNavigate();
@@ -65,6 +66,9 @@ function SeeScores() {
     const [userScore, setUserScore] = useState<UserScore[]>();
     const [userAnswersFinal, setUserAnswersFinal] = useState<UserAnswers[]>();
     const [questionsFinal, setQuestionsFinal] = useState<Question[]>();
+    const [totalScore, setTotalScore] = useState<number>(0);
+    const [totalCorrect, setTotalCorrect] = useState<number>(0);
+    const [totalWrong, setTotalWrong] = useState<number>(0);
 
     const getUserScoresByEmail = async (email: string) => {
         await axios.get(`${UserScoresURL}/GetUserScoresByEmail/${email}`).then(response => {
@@ -115,11 +119,26 @@ function SeeScores() {
         });
     }
 
+    const getDetailedInfo = async (email: string) => {
+        await axios.get(`${UserScoreURL}/GetTotalScoreByEmail/${email}`).then(response => {
+            setTotalScore(response.data);
+        });
+
+        await axios.get(`${UserScoreURL}/GetTotalCorrectByEmail/${email}`).then(response => {
+            setTotalCorrect(response.data);
+        });
+
+        await axios.get(`${UserScoreURL}/GetTotalWrongEmail/${email}`).then(response => {
+            setTotalWrong(response.data);
+        });
+    }
+
     useEffect(() => {
         let user: User = authService.getUser;
         setUser(user);
         getUserScoresByEmail(user.email);
         getUserProfileInfo(user.email);
+        getDetailedInfo(user.email);
     }, []);
 
     return (
@@ -130,7 +149,7 @@ function SeeScores() {
                 <div className="flex flex-row h-screen w-full p-2">
                     <div className="w-3/5">
                         <div className="ml-40">
-                            <UserCard userProfile={userProfile} user={user} />
+                            <UserCard userProfile={userProfile} user={user} totalScore={totalScore} totalCorrect={totalCorrect} totalWrong={totalWrong} />
                         </div>
 
                         <div className="flex flex-wrap justify-center gap-8 text-black mt-20">

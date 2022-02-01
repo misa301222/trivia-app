@@ -13,6 +13,10 @@ import EnterRoom from './Components/Rooms/Enter-Room/EnterRoom';
 import ManageQuestions from './Components/Manage-Questions/ManageQuestions';
 import SeeScores from './Components/See-Scores/SeeScores';
 import SeeResults from './Components/See-Results/SeeResults';
+import Config from './Components/Config/Config';
+import EditUserProfile from './Components/User-Profile/Edit-User-Profile/EditUserProfile';
+import SeeUserProfile from './Components/User-Profile/See-User-Profile/SeeUserProfile';
+import SearchUsers from './Components/Search-Users/SearchUsers';
 
 function App() {
   const location = useLocation();
@@ -36,6 +40,10 @@ function App() {
             <Route path="/enterRoom/:generatedName/:roomId" element={<RequireAuth redirectTo='/login'><div className='page'><EnterRoom /></div></RequireAuth>}></Route>
             <Route path="/seeResults" element={<RequireAuth redirectTo='/login'><div className='page'><SeeResults /></div></RequireAuth>}></Route>
             <Route path="/seeScores" element={<RequireAuth redirectTo='/login'><div className='page'><SeeScores /></div></RequireAuth>}></Route>
+            <Route path="/config" element={<RequireAuth redirectTo='/login'><div className='page'><Config /></div></RequireAuth>}></Route>
+            <Route path="/editUserProfile" element={<RequireAuth redirectTo='/login'><div className='page'><EditUserProfile /></div></RequireAuth>}></Route>
+            <Route path="/seeUserProfile" element={<RequireAuth redirectTo='/login'><div className='page'><SeeUserProfile /></div></RequireAuth>}></Route>
+            <Route path="/searchUsers" element={<RequireAuth redirectTo='/login'><div className='page'><SearchUsers /></div></RequireAuth>}></Route>
             <Route path="/manageQuestions" element={<RequireAuth redirectTo='/login'><div className='page'><ManageQuestions /></div></RequireAuth>}></Route>
             <Route path="/logout" element={<div ref={nodeRef} className='page'><Logout /></div>}></Route>
           </Routes>

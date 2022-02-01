@@ -118,11 +118,9 @@ function EnterRoom() {
             // console.log(finalScore);
             let userScoreId: number;
             await axios.post(`${UserScoreURL}`, finalScore).then(response => {
-                console.log('dataa');
                 console.log(response.data);
                 setUserScore(response.data);
                 userScoreId = response.data.userScoreId;
-                console.log('finaaaaaaal');
             });
 
             console.log('id: ' + userScoreId!);
