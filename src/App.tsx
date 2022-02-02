@@ -17,6 +17,7 @@ import Config from './Components/Config/Config';
 import EditUserProfile from './Components/User-Profile/Edit-User-Profile/EditUserProfile';
 import SeeUserProfile from './Components/User-Profile/See-User-Profile/SeeUserProfile';
 import SearchUsers from './Components/Search-Users/SearchUsers';
+import UserManagment from './Components/User-Managment/UserManagment';
 
 function App() {
   const location = useLocation();
@@ -44,7 +45,9 @@ function App() {
             <Route path="/editUserProfile" element={<RequireAuth redirectTo='/login'><div className='page'><EditUserProfile /></div></RequireAuth>}></Route>
             <Route path="/seeUserProfile" element={<RequireAuth redirectTo='/login'><div className='page'><SeeUserProfile /></div></RequireAuth>}></Route>
             <Route path="/searchUsers" element={<RequireAuth redirectTo='/login'><div className='page'><SearchUsers /></div></RequireAuth>}></Route>
+            <Route path="/seeUserProfile/:email" element={<RequireAuth redirectTo='/login'><div className='page'><SeeUserProfile /></div></RequireAuth>}></Route>
             <Route path="/manageQuestions" element={<RequireAuth redirectTo='/login'><div className='page'><ManageQuestions /></div></RequireAuth>}></Route>
+            <Route path="/userManagment" element={<RequireAuth redirectTo='/login'><div className='page'><UserManagment /></div></RequireAuth>}></Route>
             <Route path="/logout" element={<div ref={nodeRef} className='page'><Logout /></div>}></Route>
           </Routes>
         </CSSTransition>
