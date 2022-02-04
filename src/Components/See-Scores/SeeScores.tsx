@@ -143,7 +143,7 @@ function SeeScores() {
 
     return (
         <div className="mt-10">
-            <h1 className="font-bold">Scores <FontAwesomeIcon icon={faFileAlt} /></h1>
+            <h1 className="header">Scores <FontAwesomeIcon icon={faFileAlt} /></h1>
 
             <div className="mt-10">
                 <div className="flex flex-row h-screen w-full p-2">

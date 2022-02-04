@@ -96,25 +96,47 @@ function ManageQuestions() {
     const handleOnSubmitFormEdit = async (event: SyntheticEvent) => {
         event.preventDefault();
         if (currentRoom) {
-            let question: Question = newQuestion;
+            let question: Question = editQuestion;
             question.roomId = currentRoom.roomId;
 
-            await axios.put(`${QuestionURL}/${editQuestion.questionId}`, editQuestion).then(response => {
-                console.log(response.data);
+            let answer: string = question.answer;
+            if (answer) {
+                if (answer === editQuestion.firstOption || answer === editQuestion.secondOption || answer === editQuestion.thirdOption ||
+                    answer === editQuestion.fourthOption || answer === editQuestion.fifthOption || answer === editQuestion.sixthOption) {
+                    await axios.put(`${QuestionURL}/${editQuestion.questionId}`, editQuestion).then(response => {
+                        console.log(response.data);
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: 'Question Edited Succesfully!!!',
+                            showConfirmButton: false,
+                            timer: 900
+                        }).then(() => {
+                            setShowEditModal(false);
+                        });
+                    });
+
+                    await axios.get(`${QuestionURL}/GetQuestionsByRoomId/${currentRoom.roomId}`).then(response => {
+                        setCurrentQuestions(response.data);
+                    });
+                } else {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'error',
+                        title: 'Answer is not in options!',
+                        showConfirmButton: true,
+                    });
+                }
+            } else {
                 Swal.fire({
                     position: 'center',
-                    icon: 'success',
-                    title: 'Question Edited Succesfully!!!',
-                    showConfirmButton: false,
-                    timer: 900
-                }).then(() => {
-                    setShowEditModal(false);
+                    icon: 'error',
+                    title: 'You must fill the Answer!',
+                    showConfirmButton: true,
                 });
-            });
+            }
 
-            await axios.get(`${QuestionURL}/GetQuestionsByRoomId/${currentRoom.roomId}`).then(response => {
-                setCurrentQuestions(response.data);
-            });
+
         }
     }
 
@@ -197,34 +219,43 @@ function ManageQuestions() {
 
             //CHECK IF ANSWERS IS IN OPTIONS            
             let answer: string = newQuestion.answer;
-            if (answer === newQuestion.firstOption || answer === newQuestion.secondOption || answer === newQuestion.thirdOption ||
-                answer === newQuestion.fourthOption || answer === newQuestion.fifthOption || answer === newQuestion.sixthOption) {
-                let question: Question = newQuestion;
-                question.roomId = currentRoom.roomId;
+            if (answer) {
+                if (answer === newQuestion.firstOption || answer === newQuestion.secondOption || answer === newQuestion.thirdOption ||
+                    answer === newQuestion.fourthOption || answer === newQuestion.fifthOption || answer === newQuestion.sixthOption) {
+                    let question: Question = newQuestion;
+                    question.roomId = currentRoom.roomId;
 
-                await axios.post(`${QuestionURL}`, question).then(response => {
-                    console.log(response.data);
+                    await axios.post(`${QuestionURL}`, question).then(response => {
+                        console.log(response.data);
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: 'Question created!',
+                            showConfirmButton: false,
+                            timer: 900
+                        }).then(() => {
+                            setShow(false);
+                        });
+                    });
+
+                    await axios.get(`${QuestionURL}/GetQuestionsByRoomId/${currentRoom.roomId}`).then(response => {
+                        setCurrentQuestions(response.data);
+                    });
+                } else {
                     Swal.fire({
                         position: 'center',
-                        icon: 'success',
-                        title: 'Question created!',
-                        showConfirmButton: false,
-                        timer: 900
-                    }).then(() => {
-                        setShow(false);
+                        icon: 'error',
+                        title: 'Answer is not in options!',
+                        showConfirmButton: true,
                     });
-                });
-
-                await axios.get(`${QuestionURL}/GetQuestionsByRoomId/${currentRoom.roomId}`).then(response => {
-                    setCurrentQuestions(response.data);
-                });
+                }
             } else {
                 Swal.fire({
                     position: 'center',
                     icon: 'error',
-                    title: 'Anser is not in options!',
+                    title: 'You must fill the Answer!',
                     showConfirmButton: true,
-                }); 
+                });
             }
         }
     }
@@ -272,7 +303,7 @@ function ManageQuestions() {
                 <form onSubmit={handleOnSubmitForm} className="w-2/6 m-auto mt-10 shadow-lg shadow-cyan-500/50 ease-in-out duration-300 hover:shadow-orange-500/50 rounded-lg p-5">
                     <div className="mb-10 flex flex-row justify-center">
                         <h5 className="text-slate-300 font-bold p-2">Room Name</h5>
-                        <input onChange={handleOnChangeRoomName} className="shadow-lg w-6/12 shadow-black/50 border-0 rounded py-2 px-3 bg-zinc-900 text-slate-300 focus:outline-none font-bold" maxLength={50} />
+                        <input onChange={handleOnChangeRoomName} className="form-control" maxLength={50} />
                     </div>
 
                     <div className="mb-3 flex flex-row justify-center">
@@ -381,9 +412,9 @@ function ManageQuestions() {
             {show ?
                 <motion.div id="modalQuestion" aria-hidden="true" className="overflow-y-auto overflow-x-hidden fixed right-0 left-0 top-4 z-50 justify-center items-center h-modal md:h-full md:inset-0 bg-black/50">
                     <div className="relative px-4 w-full max-w-2xl h-full md:h-auto mx-auto mt-20">
-                        <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                        <div className="relative bg-[#505d75] rounded-lg shadow dark:bg-gray-700">
                             <div className="flex justify-between items-start p-5 rounded-t border-b dark:border-gray-600">
-                                <h3 className="text-xl font-semibold text-gray-900 lg:text-2xl dark:text-white">
+                                <h3 className="text-xl font-semibold text-white lg:text-2xl dark:text-white">
                                     Add a New Question!
                                 </h3>
                                 <button type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" onClick={() => setShow(false)}>
@@ -455,9 +486,9 @@ function ManageQuestions() {
                 showEditModal ?
                     <motion.div id="modalQuestion" aria-hidden="true" className="overflow-y-auto overflow-x-hidden fixed right-0 left-0 top-4 z-50 justify-center items-center h-modal md:h-full md:inset-0 bg-black/50">
                         <div className="relative px-4 w-full max-w-2xl h-full md:h-auto mx-auto mt-20">
-                            <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                            <div className="relative bg-[#505d75] rounded-lg shadow dark:bg-gray-700">
                                 <div className="flex justify-between items-start p-5 rounded-t border-b dark:border-gray-600">
-                                    <h3 className="text-xl font-semibold text-gray-900 lg:text-2xl dark:text-white">
+                                    <h3 className="text-xl font-semibold text-white lg:text-2xl dark:text-white">
                                         Edit Question
                                     </h3>
                                     <button type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" onClick={() => setShowEditModal(false)}>

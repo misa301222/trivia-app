@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import './App.css';
 import { Route, Routes, useLocation, Navigate } from 'react-router-dom';
 import NavBar from './Components/NavBar/NavBar';
@@ -19,6 +19,14 @@ import SeeUserProfile from './Components/User-Profile/See-User-Profile/SeeUserPr
 import SearchUsers from './Components/Search-Users/SearchUsers';
 import UserManagment from './Components/User-Managment/UserManagment';
 
+const Wrapper = ({ children }: any) => {
+  const location = useLocation();
+  useLayoutEffect(() => {
+    document.documentElement.scrollTo(0, 0);
+  }, [location.pathname]);
+  return children;
+}
+
 function App() {
   const location = useLocation();
   const nodeRef = useRef(null);
@@ -33,23 +41,25 @@ function App() {
           classNames="page"
           in
           timeout={400}>
-          <Routes location={location}>
-            <Route path="/" element={<div className='page'><Home /></div>}></Route>
-            <Route path="/login" element={<div ref={nodeRef} className='page'><div ref={nodeRef}><Login /></div></div>}></Route>
-            <Route path="/dashboard" element={<RequireAuth redirectTo='/login'><div className='page'><Dashboard /></div></RequireAuth>}></Route>
-            <Route path="/seeRooms" element={<RequireAuth redirectTo='/login'><div className='page'><SeeRooms /></div></RequireAuth>}></Route>
-            <Route path="/enterRoom/:generatedName/:roomId" element={<RequireAuth redirectTo='/login'><div className='page'><EnterRoom /></div></RequireAuth>}></Route>
-            <Route path="/seeResults" element={<RequireAuth redirectTo='/login'><div className='page'><SeeResults /></div></RequireAuth>}></Route>
-            <Route path="/seeScores" element={<RequireAuth redirectTo='/login'><div className='page'><SeeScores /></div></RequireAuth>}></Route>
-            <Route path="/config" element={<RequireAuth redirectTo='/login'><div className='page'><Config /></div></RequireAuth>}></Route>
-            <Route path="/editUserProfile" element={<RequireAuth redirectTo='/login'><div className='page'><EditUserProfile /></div></RequireAuth>}></Route>
-            <Route path="/seeUserProfile" element={<RequireAuth redirectTo='/login'><div className='page'><SeeUserProfile /></div></RequireAuth>}></Route>
-            <Route path="/searchUsers" element={<RequireAuth redirectTo='/login'><div className='page'><SearchUsers /></div></RequireAuth>}></Route>
-            <Route path="/seeUserProfile/:email" element={<RequireAuth redirectTo='/login'><div className='page'><SeeUserProfile /></div></RequireAuth>}></Route>
-            <Route path="/manageQuestions" element={<RequireAuth redirectTo='/login'><div className='page'><ManageQuestions /></div></RequireAuth>}></Route>
-            <Route path="/userManagment" element={<RequireAuth redirectTo='/login'><div className='page'><UserManagment /></div></RequireAuth>}></Route>
-            <Route path="/logout" element={<div ref={nodeRef} className='page'><Logout /></div>}></Route>
-          </Routes>
+          <Wrapper>
+            <Routes location={location}>
+              <Route path="/" element={<div className='page'><Home /></div>}></Route>
+              <Route path="/login" element={<div ref={nodeRef} className='page'><div ref={nodeRef}><Login /></div></div>}></Route>
+              <Route path="/dashboard" element={<RequireAuth redirectTo='/login'><div className='page'><Dashboard /></div></RequireAuth>}></Route>
+              <Route path="/seeRooms" element={<RequireAuth redirectTo='/login'><div className='page'><SeeRooms /></div></RequireAuth>}></Route>
+              <Route path="/enterRoom/:generatedName/:roomId" element={<RequireAuth redirectTo='/login'><div className='page'><EnterRoom /></div></RequireAuth>}></Route>
+              <Route path="/seeResults" element={<RequireAuth redirectTo='/login'><div className='page'><SeeResults /></div></RequireAuth>}></Route>
+              <Route path="/seeScores" element={<RequireAuth redirectTo='/login'><div className='page'><SeeScores /></div></RequireAuth>}></Route>
+              <Route path="/config" element={<RequireAuth redirectTo='/login'><div className='page'><Config /></div></RequireAuth>}></Route>
+              <Route path="/editUserProfile" element={<RequireAuth redirectTo='/login'><div className='page'><EditUserProfile /></div></RequireAuth>}></Route>
+              <Route path="/seeUserProfile" element={<RequireAuth redirectTo='/login'><div className='page'><SeeUserProfile /></div></RequireAuth>}></Route>
+              <Route path="/searchUsers" element={<RequireAuth redirectTo='/login'><div className='page'><SearchUsers /></div></RequireAuth>}></Route>
+              <Route path="/seeUserProfile/:email" element={<RequireAuth redirectTo='/login'><div className='page'><SeeUserProfile /></div></RequireAuth>}></Route>
+              <Route path="/manageQuestions" element={<RequireAuth redirectTo='/login'><div className='page'><ManageQuestions /></div></RequireAuth>}></Route>
+              <Route path="/userManagment" element={<RequireAuth redirectTo='/login'><div className='page'><UserManagment /></div></RequireAuth>}></Route>
+              <Route path="/logout" element={<div ref={nodeRef} className='page'><Logout /></div>}></Route>
+            </Routes>
+          </Wrapper>
         </CSSTransition>
       </TransitionGroup>
     </div>

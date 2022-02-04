@@ -43,7 +43,8 @@ function Login() {
                             showConfirmButton: false,
                             timer: 1100
                         }).then(function () {
-                            navigate('/');
+                            navigate('/dashboard');
+                            navigate(0);
                         })
                         break;
                     case 2:
@@ -67,11 +68,6 @@ function Login() {
             }
         );
     }
-
-    // await axios.post(`https://localhost:7025/api/User/Login`, body).then(response => {
-    //     console.log(response);
-    // });
-
 
     return (
         <div className="container mt-16 flex flex-col items-center">

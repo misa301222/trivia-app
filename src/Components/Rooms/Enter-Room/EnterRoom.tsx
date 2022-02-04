@@ -180,67 +180,69 @@ function EnterRoom() {
                                                 <h1 className="font-bold">{currentQuestion?.questionName}</h1>
                                             </div>
 
-                                            <motion.div whileTap={{
-                                                scale: 1.1
-                                            }}
-                                                className='text-slate-300' onClick={() => setSelectedAnswer(currentQuestion ? currentQuestion.firstOption : '')}>
-                                                <div
-                                                    className={`option-style ${selectedAnswer === currentQuestion?.firstOption ? 'bg-amber-500 text-emerald-900' : ''}`}>
-                                                    <h2 className="font-bold">{currentQuestion?.firstOption}</h2>
-                                                </div>
-                                            </motion.div>
-
-                                            <motion.div whileTap={{
-                                                scale: 1.1
-                                            }}
-                                                className="text-slate-300" onClick={() => setSelectedAnswer(currentQuestion ? currentQuestion.secondOption : '')}>
-                                                <div className={`option-style ${selectedAnswer === currentQuestion?.secondOption ? 'bg-amber-500 text-emerald-900' : ''}`}>
-                                                    <h2 className="font-bold">{currentQuestion?.secondOption}</h2>
-                                                </div>
-                                            </motion.div>
-
-                                            <motion.div whileTap={{
-                                                scale: 1.1
-                                            }}
-                                                className="text-slate-300" onClick={() => setSelectedAnswer(currentQuestion ? currentQuestion.thirdOption : '')}>
-                                                <div className={`option-style ${selectedAnswer === currentQuestion?.thirdOption ? 'bg-amber-500 text-emerald-900' : ''}`}>
-                                                    <h2 className="font-bold">{currentQuestion?.thirdOption}</h2>
-                                                </div>
-                                            </motion.div>
-
-                                            <motion.div whileTap={{
-                                                scale: 1.1
-                                            }}
-                                                className="text-slate-300" onClick={() => setSelectedAnswer(currentQuestion ? currentQuestion.fourthOption : '')}>
-                                                <div className={`option-style ${selectedAnswer === currentQuestion?.fourthOption ? 'bg-amber-500 text-emerald-900' : ''}`}>
-                                                    <h2 className="font-bold">{currentQuestion?.fourthOption}</h2>
-                                                </div>
-                                            </motion.div>
-
-                                            {
-                                                currentQuestion?.fifthOption ?
-                                                    <motion.div whileTap={{
-                                                        scale: 1.1
-                                                    }}
-                                                        className="text-slate-300" onClick={() => setSelectedAnswer(currentQuestion ? currentQuestion.fifthOption : '')}>
-                                                        <div className={`option-style ${selectedAnswer === currentQuestion.fifthOption ? 'bg-amber-500 text-emerald-900' : ''}`}>
-                                                            <h2 className="font-bold">{currentQuestion.fifthOption}</h2>
-                                                        </div>
-                                                    </motion.div>
-                                                    : null
-                                            }
-
-                                            {currentQuestion?.sixthOption ?
+                                            <div className="grid gap-4 grid-cols-2">
                                                 <motion.div whileTap={{
                                                     scale: 1.1
                                                 }}
-                                                    className="text-slate-300" onClick={() => setSelectedAnswer(currentQuestion ? currentQuestion.sixthOption : '')}>
-                                                    <div className={`option-style ${selectedAnswer === currentQuestion.sixthOption ? 'bg-amber-500 text-emerald-900' : ''}`}>
-                                                        <h2 className="font-bold">{currentQuestion.sixthOption}</h2>
+                                                    className='text-slate-300' onClick={() => setSelectedAnswer(currentQuestion ? currentQuestion.firstOption : '')}>
+                                                    <div
+                                                        className={`option-style ${selectedAnswer === currentQuestion?.firstOption ? 'bg-amber-500 text-emerald-900' : ''}`}>
+                                                        <h2 className="font-bold">{currentQuestion?.firstOption}</h2>
                                                     </div>
                                                 </motion.div>
-                                                : null
-                                            }
+
+                                                <motion.div whileTap={{
+                                                    scale: 1.1
+                                                }}
+                                                    className="text-slate-300" onClick={() => setSelectedAnswer(currentQuestion ? currentQuestion.secondOption : '')}>
+                                                    <div className={`option-style ${selectedAnswer === currentQuestion?.secondOption ? 'bg-amber-500 text-emerald-900' : ''}`}>
+                                                        <h2 className="font-bold">{currentQuestion?.secondOption}</h2>
+                                                    </div>
+                                                </motion.div>
+
+                                                <motion.div whileTap={{
+                                                    scale: 1.1
+                                                }}
+                                                    className="text-slate-300" onClick={() => setSelectedAnswer(currentQuestion ? currentQuestion.thirdOption : '')}>
+                                                    <div className={`option-style ${selectedAnswer === currentQuestion?.thirdOption ? 'bg-amber-500 text-emerald-900' : ''}`}>
+                                                        <h2 className="font-bold">{currentQuestion?.thirdOption}</h2>
+                                                    </div>
+                                                </motion.div>
+
+                                                <motion.div whileTap={{
+                                                    scale: 1.1
+                                                }}
+                                                    className="text-slate-300" onClick={() => setSelectedAnswer(currentQuestion ? currentQuestion.fourthOption : '')}>
+                                                    <div className={`option-style ${selectedAnswer === currentQuestion?.fourthOption ? 'bg-amber-500 text-emerald-900' : ''}`}>
+                                                        <h2 className="font-bold">{currentQuestion?.fourthOption}</h2>
+                                                    </div>
+                                                </motion.div>
+
+                                                {
+                                                    currentQuestion?.fifthOption ?
+                                                        <motion.div whileTap={{
+                                                            scale: 1.1
+                                                        }}
+                                                            className="text-slate-300" onClick={() => setSelectedAnswer(currentQuestion ? currentQuestion.fifthOption : '')}>
+                                                            <div className={`option-style ${selectedAnswer === currentQuestion.fifthOption ? 'bg-amber-500 text-emerald-900' : ''}`}>
+                                                                <h2 className="font-bold">{currentQuestion.fifthOption}</h2>
+                                                            </div>
+                                                        </motion.div>
+                                                        : null
+                                                }
+
+                                                {currentQuestion?.sixthOption ?
+                                                    <motion.div whileTap={{
+                                                        scale: 1.1
+                                                    }}
+                                                        className="text-slate-300" onClick={() => setSelectedAnswer(currentQuestion ? currentQuestion.sixthOption : '')}>
+                                                        <div className={`option-style ${selectedAnswer === currentQuestion.sixthOption ? 'bg-amber-500 text-emerald-900' : ''}`}>
+                                                            <h2 className="font-bold">{currentQuestion.sixthOption}</h2>
+                                                        </div>
+                                                    </motion.div>
+                                                    : null
+                                                }
+                                            </div>
                                         </div>
                                         :
                                         <div>

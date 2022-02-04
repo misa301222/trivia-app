@@ -1,4 +1,4 @@
-import { faListUl } from "@fortawesome/free-solid-svg-icons";
+import { faCogs, faDoorOpen, faEye, faListUl, faPlusSquare, faQuestion, faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import moment from "moment";
@@ -105,7 +105,7 @@ function Dashboard() {
             console.log(response.data);
             setUserProfile(response.data);
         });
-    }    
+    }
 
     const getDetailedInfo = async (email: string) => {
         await axios.get(`${UserScoreURL}/GetTotalScoreByEmail/${email}`).then(response => {
@@ -132,7 +132,7 @@ function Dashboard() {
         <div className="">
             <div className="flex flex-row mt-9">
                 <div className="w-4/12">
-                    <h2 className="font-bold text-neutral-300">Welcome back {user?.fullName}</h2>
+                    <h2 className="font-bold text-amber-500">Welcome back {user?.fullName}</h2>
                 </div>
 
                 <div className="w-64 h-10 rounded-lg cursor-default shadow-lg shadow-orange-500/50 text-orange-500 bg-neutral-900 ease-in-out duration-300 hover:scale-110 hover:text-cyan-500 hover:shadow-cyan-500/50">
@@ -142,53 +142,59 @@ function Dashboard() {
 
             <div className="flex flex-row mt-2">
                 <div className="w-4/12">
-                    <h5 className="font-bold text-neutral-200">{`Today is ${moment(new Date()).format('dddd')} ${moment(new Date()).format('DD')} of ${moment(new Date()).format('MMMM')} of ${moment(new Date()).format('YYYY')}`}</h5>
+                    <h5 className="font-bold text-slate-300">{`Today is ${moment(new Date()).format('dddd')} ${moment(new Date()).format('DD')} of ${moment(new Date()).format('MMMM')} of ${moment(new Date()).format('YYYY')}`}</h5>
                 </div>
             </div>
 
             <div className="flex flex-row">
                 <div className="flex flex-col pl-20 mt-10 w-3/12">
-                    <div className="h-20 bg-neutral-900 rounded-lg flex flex-col mb-10 ease-in-out duration-300 cursor-pointer hover:scale-110" onClick={async () => createNewRoom()}>
-                        <h2 className="font-bold text-neutral-300">Create Room</h2>
-                        <h5 className="text-neutral-200">Create a new Room, Share the room name with your friends!</h5>
+                    <div className="p-2 bg-neutral-900 shadow-md shadow-black  flex flex-col mb-10 ease-in-out duration-300 cursor-pointer hover:scale-110" onClick={async () => createNewRoom()}>
+                        <h1 className="absolute p-1 text-left opacity-10 -z-0"><FontAwesomeIcon icon={faPlusSquare} /></h1>
+                        <h2 className="font-bold text-orange-500/80">Create Room</h2>
+                        <h5 className="text-neutral-300 font-bold">Create a new Room and Share the room name with your friends!</h5>
                     </div>
 
-                    <div className="h-20 bg-neutral-900 rounded-lg flex flex-col mb-10 ease-in-out duration-300 cursor-pointer hover:scale-110" onClick={() => setShowJoinRoom(true)}>
-                        <h2 className="font-bold text-neutral-300">Join Room</h2>
-                        <h5 className="text-neutral-200">Join a room! You need the room name</h5>
+                    <div className="p-2 bg-neutral-900 shadow-md shadow-black flex flex-col mb-10 ease-in-out duration-300 cursor-pointer hover:scale-110" onClick={() => setShowJoinRoom(true)}>
+                        <h1 className="absolute text-left opacity-10 -z-0"><FontAwesomeIcon icon={faDoorOpen} /></h1>
+                        <h2 className="font-bold text-orange-500/80">Join Room</h2>
+                        <h5 className="text-neutral-300 font-bold">Join a room! You need the room name</h5>
                     </div>
 
-                    <Link to="/seeRooms">
-                        <div className="h-20 bg-neutral-900 rounded-lg flex flex-col mb-10 ease-in-out duration-300 cursor-pointer hover:scale-110">
-                            <h2 className="font-bold text-neutral-300">See Rooms</h2>
-                            <h5 className="text-neutral-200">Rooms created by you!</h5>
+                    <Link to="/seeRooms" className="mb-10">
+                        <div className="p-2 bg-neutral-900 shadow-md shadow-black flex flex-col ease-in-out duration-300 cursor-pointer hover:scale-110">
+                            <h1 className="absolute text-left opacity-10 -z-0"><FontAwesomeIcon icon={faEye} /></h1>
+                            <h2 className="font-bold text-orange-500/80">See Rooms</h2>
+                            <h5 className="text-neutral-300 font-bold">Rooms created by you!</h5>
                         </div>
                     </Link>
 
-                    <Link to="/manageQuestions">
-                        <div className="h-20 bg-neutral-900 rounded-lg flex flex-col mb-10 ease-in-out duration-300 cursor-pointer hover:scale-110">
-                            <h2 className="font-bold text-neutral-300">Manage Questions</h2>
-                            <h5 className="text-neutral-200">Manage Your Own Room questions!</h5>
+                    <Link to="/manageQuestions" className="mb-10">
+                        <div className="p-2 bg-neutral-900 shadow-md shadow-black flex flex-col ease-in-out duration-300 cursor-pointer hover:scale-110">
+                            <h1 className="absolute text-left p-1 opacity-10 -z-0"><FontAwesomeIcon icon={faQuestion} /></h1>
+                            <h2 className="font-bold text-orange-500/80">Manage Questions</h2>
+                            <h5 className="text-neutral-300 font-bold">Manage Your Own Room questions!</h5>
                         </div>
                     </Link>
 
-                    <Link to="/seeScores">
-                        <div className="h-20 bg-neutral-900 rounded-lg flex flex-col mb-10 ease-in-out duration-300 cursor-pointer hover:scale-110">
-                            <h2 className="font-bold text-neutral-300">See Scores</h2>
-                            <h5 className="text-neutral-200">See your past scores!</h5>
+                    <Link to="/seeScores" className="mb-10">
+                        <div className="p-2 bg-neutral-900 shadow-md shadow-black flex flex-col ease-in-out duration-300 cursor-pointer hover:scale-110">
+                            <h1 className="absolute text-left opacity-10 -z-0"><FontAwesomeIcon icon={faStar} /></h1>
+                            <h2 className="font-bold text-orange-500/80">See Scores</h2>
+                            <h5 className="text-neutral-300 font-bold">See your past scores!</h5>
                         </div>
                     </Link>
 
-                    <Link to="/config">
-                        <div className="h-20 bg-neutral-900 rounded-lg flex flex-col mb-10 ease-in-out duration-300 cursor-pointer hover:scale-110">
-                            <h2 className="font-bold text-neutral-300">Config</h2>
-                            <h5 className="text-neutral-200">...</h5>
+                    <Link to="/config" className="mb-10">
+                        <div className="p-2 bg-neutral-900 shadow-md shadow-black flex flex-col ease-in-out duration-300 cursor-pointer hover:scale-110">
+                            <h1 className="absolute text-left p-1 opacity-10 -z-0"><FontAwesomeIcon icon={faCogs} /></h1>
+                            <h2 className="font-bold text-orange-500/80">Config</h2>
+                            <h5 className="text-neutral-300 font-bold">Update your Profile Information and more!</h5>
                         </div>
                     </Link>
                 </div>
 
                 <div className="container h-full flex flex-col pl-36">
-                    <UserCard userProfile={userProfile} user={user} totalScore={totalScore} totalCorrect={totalCorrect} totalWrong = {totalWrong} />
+                    <UserCard userProfile={userProfile} user={user} totalScore={totalScore} totalCorrect={totalCorrect} totalWrong={totalWrong} />
                 </div>
             </div>
 
@@ -227,10 +233,10 @@ function Dashboard() {
                 showJoinRoom ?
                     <div id="modalJoinRoom" aria-hidden="true" className="overflow-y-auto overflow-x-hidden fixed right-0 left-0 top-4 z-50 justify-center items-center h-modal md:h-full md:inset-0 bg-black/50">
                         <div className="relative px-4 w-full max-w-2xl h-full md:h-auto mx-auto mt-40">
-                            <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                            <div className="relative bg-[#505d75] rounded-lg shadow dark:bg-gray-700">
                                 <div className="flex justify-between items-start p-5 rounded-t border-b dark:border-gray-600">
-                                    <h3 className="text-xl font-semibold text-gray-900 lg:text-2xl dark:text-white">
-                                        Terms of Service
+                                    <h3 className="text-xl font-semibold text-white lg:text-2xl dark:text-white">
+                                        Join Room
                                     </h3>
                                     <button type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" onClick={() => setShowJoinRoom(false)}>
                                         <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>

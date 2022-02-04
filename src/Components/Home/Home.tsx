@@ -15,7 +15,7 @@ function Home() {
         }}>
 
             <div className="flex flex-column justify-center p-40">
-                <div className="border-2 border-cyan-500 backdrop-blur-md rounded-lg h-40 w-2/4 shadow-lg shadow-cyan-500/50 ease-in-out duration-300 hover:scale-110 hover:shadow-lg hover:shadow-orange-500/50 hover:border-orange-500">
+                <div className="border-2 border-cyan-500 backdrop-blur-md rounded-lg h-40 w-2/4 shadow-lg shadow-cyan-500/50 ease-in-out duration-300 hover:scale-110 hover:shadow-lg hover:shadow-orange-500/50 hover:border-orange-500 cursor-default">
                     <div className="mb-5">
                         <h1 className="mt-3">Hello! Welcome to TriviaApp <FontAwesomeIcon icon={faDesktop} /></h1>
                     </div>
