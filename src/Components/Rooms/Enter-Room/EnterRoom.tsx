@@ -1,3 +1,5 @@
+import { faDemocrat } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
@@ -186,7 +188,7 @@ function EnterRoom() {
                                                 }}
                                                     className='text-slate-300' onClick={() => setSelectedAnswer(currentQuestion ? currentQuestion.firstOption : '')}>
                                                     <div
-                                                        className={`option-style ${selectedAnswer === currentQuestion?.firstOption ? 'bg-amber-500 text-emerald-900' : ''}`}>
+                                                        className={`option-style ${selectedAnswer === currentQuestion?.firstOption ? 'bg-slate-500 text-black' : ''}`}>
                                                         <h2 className="font-bold">{currentQuestion?.firstOption}</h2>
                                                     </div>
                                                 </motion.div>
@@ -195,7 +197,7 @@ function EnterRoom() {
                                                     scale: 1.1
                                                 }}
                                                     className="text-slate-300" onClick={() => setSelectedAnswer(currentQuestion ? currentQuestion.secondOption : '')}>
-                                                    <div className={`option-style ${selectedAnswer === currentQuestion?.secondOption ? 'bg-amber-500 text-emerald-900' : ''}`}>
+                                                    <div className={`option-style ${selectedAnswer === currentQuestion?.secondOption ? 'bg-slate-500 text-black' : ''}`}>
                                                         <h2 className="font-bold">{currentQuestion?.secondOption}</h2>
                                                     </div>
                                                 </motion.div>
@@ -204,7 +206,7 @@ function EnterRoom() {
                                                     scale: 1.1
                                                 }}
                                                     className="text-slate-300" onClick={() => setSelectedAnswer(currentQuestion ? currentQuestion.thirdOption : '')}>
-                                                    <div className={`option-style ${selectedAnswer === currentQuestion?.thirdOption ? 'bg-amber-500 text-emerald-900' : ''}`}>
+                                                    <div className={`option-style ${selectedAnswer === currentQuestion?.thirdOption ? 'bg-slate-500 text-black' : ''}`}>
                                                         <h2 className="font-bold">{currentQuestion?.thirdOption}</h2>
                                                     </div>
                                                 </motion.div>
@@ -213,7 +215,7 @@ function EnterRoom() {
                                                     scale: 1.1
                                                 }}
                                                     className="text-slate-300" onClick={() => setSelectedAnswer(currentQuestion ? currentQuestion.fourthOption : '')}>
-                                                    <div className={`option-style ${selectedAnswer === currentQuestion?.fourthOption ? 'bg-amber-500 text-emerald-900' : ''}`}>
+                                                    <div className={`option-style ${selectedAnswer === currentQuestion?.fourthOption ? 'bg-slate-500 text-black' : ''}`}>
                                                         <h2 className="font-bold">{currentQuestion?.fourthOption}</h2>
                                                     </div>
                                                 </motion.div>
@@ -224,7 +226,7 @@ function EnterRoom() {
                                                             scale: 1.1
                                                         }}
                                                             className="text-slate-300" onClick={() => setSelectedAnswer(currentQuestion ? currentQuestion.fifthOption : '')}>
-                                                            <div className={`option-style ${selectedAnswer === currentQuestion.fifthOption ? 'bg-amber-500 text-emerald-900' : ''}`}>
+                                                            <div className={`option-style ${selectedAnswer === currentQuestion.fifthOption ? 'bg-slate-500 text-black' : ''}`}>
                                                                 <h2 className="font-bold">{currentQuestion.fifthOption}</h2>
                                                             </div>
                                                         </motion.div>
@@ -236,7 +238,7 @@ function EnterRoom() {
                                                         scale: 1.1
                                                     }}
                                                         className="text-slate-300" onClick={() => setSelectedAnswer(currentQuestion ? currentQuestion.sixthOption : '')}>
-                                                        <div className={`option-style ${selectedAnswer === currentQuestion.sixthOption ? 'bg-amber-500 text-emerald-900' : ''}`}>
+                                                        <div className={`option-style ${selectedAnswer === currentQuestion.sixthOption ? 'bg-slate-500 text-black' : ''}`}>
                                                             <h2 className="font-bold">{currentQuestion.sixthOption}</h2>
                                                         </div>
                                                     </motion.div>
@@ -246,7 +248,7 @@ function EnterRoom() {
                                         </div>
                                         :
                                         <div>
-                                            <h5 className="font-bold text-2xl">Game is finished owo</h5>
+                                            <h5 className="font-bold text-2xl">Game is Finished <FontAwesomeIcon icon={faDemocrat} className='text-2xl text-amber-500' /></h5>
                                             <div className="pt-5 w-56 m-auto">
                                                 <div className="bg-neutral-800 rounded-lg shadow-lg p-3 ease-in-out duration-300 shadow-orange-500/50 text-orange-500/50 hover:shadow-orange-500 hover:text-orange-500 cursor-default">
                                                     <h2 className="font-bold">Summary</h2>
@@ -255,15 +257,15 @@ function EnterRoom() {
                                                 <div className="flex flex-row mt-14 bg-neutral-800 rounded-lg p-5">
                                                     <div className="w-2/4">
                                                         <div className="mb-3">
-                                                            <h5 className="text-2xl font-bold">Correct</h5>
+                                                            <h5 className="text-2xl font-bold text-amber-500">Correct</h5>
                                                         </div>
 
                                                         <div className="mb-3">
-                                                            <h5 className="text-2xl font-bold">Wrong</h5>
+                                                            <h5 className="text-2xl font-bold text-amber-500">Wrong</h5>
                                                         </div>
 
                                                         <div className="mb-3">
-                                                            <h5 className="text-2xl font-bold">Score</h5>
+                                                            <h5 className="text-2xl font-bold text-amber-500">Score</h5>
                                                         </div>
                                                     </div>
 
@@ -281,13 +283,6 @@ function EnterRoom() {
                                                         </div>
                                                     </div>
                                                 </div>
-
-
-                                                {/* {userAnswers?.map((element: UserAnswers, index: number) => (
-                                                    <div className="mb-3" key={index}>
-                                                        {element.question} - {index} - {element.answer}
-                                                    </div>
-                                                ))} */}
                                             </div>
                                         </div>
                                 }

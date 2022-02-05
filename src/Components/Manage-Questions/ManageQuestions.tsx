@@ -1,4 +1,4 @@
-import { faPencilAlt, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { faPencilAlt, faQuestionCircle, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { motion } from "framer-motion";
@@ -165,6 +165,8 @@ function ManageQuestions() {
                     icon: 'error',
                     title: 'Whoops!<br> It seems the room name does not exist.<br>Or Maybe you did not create that room!! <br> Please try again :)',
                     showConfirmButton: true,
+                }).then(() => {
+                    setShowTable(false);
                 });
             });
 
@@ -296,13 +298,13 @@ function ManageQuestions() {
     return (
         <div>
             <div className="container">
-                <div className="font-bold text-slate-300 mt-10">
-                    <h1>Manage Questions</h1>
+                <div className="mt-10">
+                    <h1 className="header">Manage Questions <FontAwesomeIcon icon={faQuestionCircle} /></h1>
                 </div>
 
-                <form onSubmit={handleOnSubmitForm} className="w-2/6 m-auto mt-10 shadow-lg shadow-cyan-500/50 ease-in-out duration-300 hover:shadow-orange-500/50 rounded-lg p-5">
+                <form onSubmit={handleOnSubmitForm} className="w-2/6 m-auto mt-10 bg-neutral-800 shadow-lg shadow-black p-5">
                     <div className="mb-10 flex flex-row justify-center">
-                        <h5 className="text-slate-300 font-bold p-2">Room Name</h5>
+                        <h5 className="text-slate-300 font-bold text-xl p-2">Room Name</h5>
                         <input onChange={handleOnChangeRoomName} className="form-control" maxLength={50} />
                     </div>
 

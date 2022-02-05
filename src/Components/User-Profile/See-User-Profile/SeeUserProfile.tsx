@@ -138,7 +138,7 @@ function SeeUserProfile() {
                             transition={{
                                 type: 'spring'
                             }}
-                            className="rounded-lg relative top-2/3 left-full w-1/2 bg-slate-300 backdrop-blur-sm shadow-lg shadow-black cursor-default">
+                            className="rounded-lg relative top-2/3 left-full w-fit p-2 bg-slate-300 backdrop-blur-sm shadow-lg shadow-black cursor-default">
                             <h5 className="text-black font-bold"><FontAwesomeIcon icon={faMapMarkerAlt} className="text-red-700" /> {userProfile?.location}</h5>
                         </motion.div>
                     </div>
@@ -148,7 +148,7 @@ function SeeUserProfile() {
                             <h5 className="text-black font-bold text-2xl">{user?.fullName}</h5>
                         </div>
 
-                        <div className="p-1 rounded-lg bg-neutral-100 w-11/12 m-auto shadow-md shadow-black">
+                        <div className="p-3 rounded-lg bg-neutral-100 w-11/12 m-auto shadow-md shadow-black">
                             <div className="columns-3 w-4/5 m-auto text-2xl">
                                 <div>
                                     <h5 className="font-bold text-black">{totalCorrect}</h5>

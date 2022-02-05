@@ -40,7 +40,7 @@ function SeeResults() {
         setQuestionsFinal(questions as Question[]);
         setUserAnswersFinal(userAnswersProps as UserAnswers[]);
         setUserScoreFinal(userScore as UserScore[]);
-        //console.log(userScore);
+        console.log(userScore);
     }, []);
 
     return (

@@ -66,10 +66,10 @@ function SeeRooms() {
                     {
                         roomsCreatedByUser?.length ?
                             roomsCreatedByUser.map((element: Room, index: number) => (
-                                <div key={index} className="h-60 bg-neutral-600 w-56 rounded-lg shadow-lg shadow-black cursor-pointer ease-in-out duration-300 hover:scale-110" onClick={() => handleCopiedText(element.generatedName)}>
+                                <div key={index} className="h-60 bg-neutral-900 w-56 shadow-md shadow-black cursor-pointer ease-in-out duration-300 hover:scale-110" onClick={() => handleCopiedText(element.generatedName)}>
                                     <div className="flex flex-col justify-center">
                                         <div className=" mt-1">
-                                            <h5 className="font-bold text-xl text-sky-200">Room Name</h5>
+                                            <h5 className="font-bold text-xl text-cyan-500">Room Name</h5>
                                         </div>
                                         <div className="mb-4">
                                             <h5 className="font-bold text-3xl text-slate-300">{element.generatedName}</h5>

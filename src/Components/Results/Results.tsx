@@ -14,11 +14,11 @@ interface Question {
     roomId: number
 }
 
-function Results({ questionsFinal, userAnswersFinal, userScoreFinal }: any) {
+function Results({ questionsFinal, userAnswersFinal, userScoreFinal }: any) {    
     return (
         <div className="container">
-            <h1 className="mt-16">Results <FontAwesomeIcon icon={faPollH} /> </h1>
-            <h5 className="font-bold mt-10 text-slate-200">Sent on <u>{userScoreFinal?.dateSent ? `${moment(userScoreFinal).format('MM/DD/YYYY')} at ${moment(userScoreFinal).format('hh:mm')}` : null}</u></h5>
+            <h1 className="mt-16 header">Results <FontAwesomeIcon icon={faPollH} /> </h1>
+            <h5 className="font-bold mt-10 text-slate-200">Sent on <u>{userScoreFinal?.dateSent ? `${moment(userScoreFinal.dateSent).format('MM/DD/YYYY HH:mm')}` : null}</u></h5>
             <div className="container">
                 {
                     questionsFinal?.map((element: Question, index: number) => (

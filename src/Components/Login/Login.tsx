@@ -3,6 +3,8 @@ import { ChangeEvent, SyntheticEvent, useState } from "react";
 import Swal from "sweetalert2";
 import authService from "../../Services/auth.service";
 import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSignInAlt } from "@fortawesome/free-solid-svg-icons";
 
 interface User {
     email: string,
@@ -71,7 +73,11 @@ function Login() {
 
     return (
         <div className="container mt-16 flex flex-col items-center">
-            <form onSubmit={handleSubmit} className="w-3/5 border-2 border-cyan-500 rounded-lg p-4 shadow-lg shadow-cyan-500/50">
+            <div className="mb-10">
+                <h1 className="header">Login <FontAwesomeIcon icon={faSignInAlt} /></h1>
+            </div>
+
+            <form onSubmit={handleSubmit} className="w-3/5 shadow-lg p-5 bg-neutral-800 shadow-black">
                 <div className="mb-3">
                     <label className="block text-white text-lg font-bold mb-2" htmlFor="inputEmail">Email</label>
                     <input onChange={handleOnChangeEmail} className="form-control" type='text' />

@@ -1,4 +1,4 @@
-import { faBook } from "@fortawesome/free-solid-svg-icons";
+import { faBook, faHome, faSignOutAlt, faTasks, faUserTie } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -24,7 +24,7 @@ function NavBar() {
                 <div className="text-lg lg:flex-grow">
                     <div className="p-1 w-fit m-auto">
                         <Link to="/" className="block mt-4 lg:inline-block lg:mt-0 mr-4 p-2 text-slate-300 hover:text-amber-400 ease-in-out duration-300">
-                            <h5 className="font-bold ">Home</h5>
+                            <h5 className="font-bold "><FontAwesomeIcon icon={faHome} /> Home</h5>
                         </Link>
                         {!isLoggedIn ?
                             <Link to="/login" className="block mt-4 lg:inline-block lg:mt-0 mr-4 p-2 text-slate-300 hover:text-amber-400 ease-in-out duration-300">
@@ -33,20 +33,20 @@ function NavBar() {
                         }
                         {isLoggedIn ?
                             <Link to="/dashboard" className="block mt-4 lg:inline-block lg:mt-0 mr-4 p-2 text-slate-300 hover:text-amber-400 ease-in-out duration-300">
-                                <h5 className="font-bold ">DashBoard</h5>
+                                <h5 className="font-bold "><FontAwesomeIcon icon={faTasks} /> DashBoard</h5>
                             </Link>
                             : null
                         }
                         {isLoggedIn ?
                             <Link to="/searchUsers" className="block mt-4 lg:inline-block lg:mt-0 mr-4 p-2 text-slate-300 hover:text-amber-400 ease-in-out duration-300">
-                                <h5 className="font-bold ">Users</h5>
+                                <h5 className="font-bold"><FontAwesomeIcon icon={faUserTie} /> Users</h5>
                             </Link>
                             : null
                         }
 
                         {isLoggedIn ?
                             <Link to="/logout" className="block mt-4 lg:inline-block lg:mt-0 mr-4 p-2 text-slate-300 hover:text-amber-400 ease-in-out duration-300">
-                                <h5 className="font-bold ">Logout</h5>
+                                <h5 className="font-bold "><FontAwesomeIcon icon={faSignOutAlt} /> Logout</h5>
                             </Link>
                             : null
                         }

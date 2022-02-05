@@ -1,12 +1,11 @@
-import { faFileAlt } from "@fortawesome/free-solid-svg-icons";
+import { faFileAlt, faSmile } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
-import { motion } from "framer-motion";
-import moment from "moment";
 import { useEffect, useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
 import authService from "../../Services/auth.service";
+import Pagination from "../Pagination/Pagination";
 import UserCard from "../UserCard/UserCard";
+import UserScoreCard from "../UserScoreCard/UserScoreCard";
 
 interface User {
     email: string,
@@ -33,39 +32,14 @@ interface UserProfile {
     aboutMeDescription: string
 }
 
-interface UserAnswers {
-    question: string,
-    answer: string,
-    isRight: boolean,
-    userScoreId: number
-}
-
-interface Question {
-    questionName: string,
-    firstOption: string,
-    secondOption: string,
-    thirdOption: string,
-    fourthOption: string,
-    fifthOption: string,
-    sixthOption: string,
-    answer: string
-    roomId: number
-}
-
-const RoomURL = 'https://localhost:7025/api/Rooms';
-const QuestionURL = 'https://localhost:7025/api/Questions';
 const UserScoresURL = 'https://localhost:7025/api/UserScores';
 const UserProfileURL = 'https://localhost:7025/api/UserProfiles';
-const UserAnswersURL = 'https://localhost:7025/api/UserAnswers';
 const UserScoreURL = 'https://localhost:7025/api/UserScores';
 
 function SeeScores() {
-    let navigate = useNavigate();
     const [user, setUser] = useState<User>();
     const [userProfile, setUserProfile] = useState<UserProfile>();
     const [userScore, setUserScore] = useState<UserScore[]>();
-    const [userAnswersFinal, setUserAnswersFinal] = useState<UserAnswers[]>();
-    const [questionsFinal, setQuestionsFinal] = useState<Question[]>();
     const [totalScore, setTotalScore] = useState<number>(0);
     const [totalCorrect, setTotalCorrect] = useState<number>(0);
     const [totalWrong, setTotalWrong] = useState<number>(0);
@@ -80,42 +54,6 @@ function SeeScores() {
         await axios.get(`${UserProfileURL}/${userEmail}`).then(response => {
             console.log(response.data);
             setUserProfile(response.data);
-        });
-    }
-
-    const handleOnClickDetails = async (element: UserScore) => {
-        let userAnswers: UserAnswers[] = [];
-        let questions: Question[] = [];
-
-        await axios.get(`${UserAnswersURL}/GetUserAnswersByUserScoreId/${element.userScoreId}`).then(response => {
-            setUserAnswersFinal(response.data);
-            userAnswers = response.data;
-        });
-
-        let roomId: number = 0;
-        await axios.get(`${RoomURL}/GetRoomsByGeneratedName/${element.generatedName}`).then(response => {
-            roomId = response.data.roomId;
-        })
-
-        await axios.get(`${QuestionURL}/GetQuestionsByRoomId/${roomId}`).then(response => {
-            setQuestionsFinal(response.data);
-            questions = response.data;
-        });
-
-        /*
-        return <Navigate to="/seeResults"
-            state={{
-                userAnswersProps: userAnswers,
-                questions: questions,
-                userScore: userScore
-            }} />
-            */
-        navigate('/seeResults', {
-            state: {
-                userAnswersProps: userAnswers,
-                questions: questions,
-                userScore: element
-            }
         });
     }
 
@@ -155,56 +93,16 @@ function SeeScores() {
                         <div className="flex flex-wrap justify-center gap-8 text-black mt-20">
                             {
                                 userScore?.length ?
-                                    userScore?.map((element: UserScore, index: number) => (
-                                        <motion.div
-                                            whileHover={{
-                                                scale: 1.1
-                                            }}
-                                            transition={{
-                                                type: "spring"
-                                            }}
-                                            className="h-[24rem] w-[20rem] bg-[#cccccc] border-2 shadow-md shadow-black border-black rounded-lg cursor-pointer" key={index}>
-                                            <div className="flex flex-col">
-                                                <div className="flex flex-row justify-end">
-                                                    <span className="badge">{element.dateSent ? `${moment(element.dateSent).format('MM/DD/YYYY')} at ${moment(element.dateSent).format('HH:mm')}` : null}</span>
-                                                </div>
-
-                                                <h2 className="mt-2 font-bold">Score</h2>
-                                                <div className="flex flex-row mt-5">
-                                                    <div className="w-1/2"><h5 className="font-bold">Score</h5></div>
-                                                    <div className="w-1/2"><h5 className="font-bold">{element.score.toFixed(2)} / 100.00</h5></div>
-                                                </div>
-
-                                                <div className="flex flex-row mt-5 p-5">
-                                                    <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                                                        <div className="bg-blue-600 h-2.5 rounded-full" style={{ width: `${element.score.toFixed(2)}%` }}></div>
-                                                    </div>
-                                                </div>
-
-                                                <div className="rounded-lg bg-neutral-100 border-[1px] border-black/50 w-11/12 m-auto p-3">
-                                                    <div className="flex flex-row">
-                                                        <div className="w-1/2"><h5 className="font-bold">Correct</h5></div>
-                                                        <div className="w-1/2"><h5 className="font-bold">{element.correct}</h5></div>
-                                                    </div>
-
-                                                    <div className="flex flex-row">
-                                                        <div className="w-1/2"><h5 className="font-bold">Wrong</h5></div>
-                                                        <div className="w-1/2"><h5 className="font-bold">{element.wrong}</h5></div>
-                                                    </div>
-                                                </div>
-
-                                                <div className="flex flex-row mt-10 w-[75%] m-auto">
-                                                    <div className="w-1/2"><button onClick={async () => handleOnClickDetails(element)} className="btn-primary w-[90%]">Details</button></div>
-                                                    <div className="w-1/2"><h5 className="font-bold">2</h5></div>
-                                                </div>
-
-                                            </div>
-                                        </motion.div>
-                                    ))
+                                    (
+                                        <Pagination data={userScore}
+                                            RenderComponent={UserScoreCard}
+                                            title="UserScore"
+                                            pageLimit={0}
+                                            dataLimit={9} />
+                                    )
                                     :
-                                    <div className="mt-5">
-                                        <h5 className="text-2xl text-red-600 font-bold">Whoops! It seems there's not scores</h5>
-                                        <h5 className="text-2xl text-slate-300 font-bold">Scores will appear here eventually, you just need to play a game first.</h5>
+                                    <div className="mt-20">
+                                        <h5 className="text-4xl text-red-700 font-bold">Whoops!! It seems there's no scores, send a score in order to see your data. <FontAwesomeIcon icon={faSmile}/></h5>
                                     </div>
                             }
                         </div>
