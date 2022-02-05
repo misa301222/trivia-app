@@ -8,6 +8,7 @@ function Logout() {
     const logout = () => {
         localStorage.clear();
         navigate('/');
+        navigate(0);
     }
 
     useEffect(() => {
