@@ -18,6 +18,7 @@ import EditUserProfile from './Components/User-Profile/Edit-User-Profile/EditUse
 import SeeUserProfile from './Components/User-Profile/See-User-Profile/SeeUserProfile';
 import SearchUsers from './Components/Search-Users/SearchUsers';
 import UserManagment from './Components/User-Managment/UserManagment';
+import NotFound from './Components/Not-Found/NotFound';
 
 const Wrapper = ({ children }: any) => {
   const location = useLocation();
@@ -58,6 +59,7 @@ function App() {
               <Route path="/manageQuestions" element={<RequireAuth redirectTo='/login'><div className='page'><ManageQuestions /></div></RequireAuth>}></Route>
               <Route path="/userManagment" element={<RequireAuth redirectTo='/login'><div className='page'><UserManagment /></div></RequireAuth>}></Route>
               <Route path="/logout" element={<div ref={nodeRef} className='page'><Logout /></div>}></Route>
+              <Route path="*" element={<div className='page'><NotFound /></div>}></Route>
             </Routes>
           </Wrapper>
         </CSSTransition>

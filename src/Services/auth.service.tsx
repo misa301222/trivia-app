@@ -71,7 +71,7 @@ class AuthService {
     }
 
     get getCurrentUser() {
-        return localStorage.getItem('user');
+        return localStorage.getItem('email');
     }
 
     get getUser(): User {

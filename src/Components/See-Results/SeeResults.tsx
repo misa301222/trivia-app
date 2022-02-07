@@ -43,6 +43,7 @@ function SeeResults() {
         console.log(userScore);
     }, []);
 
+    // TODO, CORREGIR, AL MOMENTO DE AGREGAR UNA PREGUNTA A UN RESULTADO ENVIADO Y CONSULTARLO TRUENA
     return (
         <div>
             <Results questionsFinal={questionsFinal} userAnswersFinal={userAnswersFinal} userScoreFinal={userScoreFinal} />
