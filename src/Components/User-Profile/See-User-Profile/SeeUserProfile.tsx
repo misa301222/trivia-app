@@ -1,9 +1,9 @@
-import { faImage, faMapMarkerAlt, faPalette, faUserSecret } from "@fortawesome/free-solid-svg-icons";
+import { faImage, faMapMarkerAlt, faPalette, faSmileWink, faUserSecret } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { motion } from "framer-motion";
 import moment from "moment";
-import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
+import { ChangeEvent, SyntheticEvent, useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import authService from "../../../Services/auth.service";
 import PaginationPost from "../../PaginationPost/PaginationPost";
@@ -43,20 +43,34 @@ interface UserPost {
     feelingId: number
 }
 
+interface Feeling {
+    feelingId: number,
+    feelingDescription: string,
+    feelingImageURL: string
+}
+
 const UserProfileURL = 'https://localhost:7025/api/UserProfiles';
 const UserScoresURL = 'https://localhost:7025/api/UserScores';
 const UserURL = 'https://localhost:7025/api/User';
 const RoomURL = 'https://localhost:7025/api/Rooms';
 const UserPostURL = 'https://localhost:7025/api/UserPosts';
+const FeelingsURL = 'https://localhost:7025/api/Feelings';
 
 function SeeUserProfile() {
     const { email } = useParams();
     const [userProfile, setUserProfile] = useState<UserProfile>();
+    const [feelings, setFeelings] = useState<Feeling[]>();
+    const [selectedFeeling, setSelectedFeeling] = useState<Feeling>({
+        feelingId: 1,
+        feelingDescription: 'None',
+        feelingImageURL: ''
+    });
     const [user, setUser] = useState<User>();
     const [totalScore, setTotalScore] = useState<number>(0);
     const [totalCorrect, setTotalCorrect] = useState<number>(0);
     const [totalWrong, setTotalWrong] = useState<number>(0);
     const [show, setShow] = useState<boolean>(false);
+    const [showFeeling, setShowFeeling] = useState<boolean>(false);
     const [isOwnProfile, setIsOwnProfile] = useState<boolean>(false);
     const [currentUser, setCurrentUser] = useState<UserProfile>();
     const [newUserPost, setNewUserPost] = useState<UserPost>({
@@ -66,8 +80,8 @@ function SeeUserProfile() {
         datePosted: new Date(),
         content: '',
         imageURL: '',
-        backgroundColorHex: '',
-        letterColorHex: '',
+        backgroundColorHex: '#252525',
+        letterColorHex: '#cbd5e1',
         feelingId: 1
     });
     const [userPosts, setUserPosts] = useState<UserPost[]>();
@@ -90,7 +104,6 @@ function SeeUserProfile() {
         let currentEmail: string = authService.getCurrentUser!;
         if (currentEmail) {
             await axios.get(`${UserProfileURL}/${currentEmail}`).then(response => {
-                console.log('Viewing as: ' + JSON.stringify(response.data));
                 setCurrentUser(response.data);
             });
         }
@@ -147,6 +160,12 @@ function SeeUserProfile() {
         });
     }
 
+    const getAllFeelings = async () => {
+        await axios.get(`${FeelingsURL}`).then(response => {
+            setFeelings(response.data);
+        });
+    }
+
     const handleOnChangeContent = (event: ChangeEvent<HTMLTextAreaElement>) => {
         setNewUserPost(prev => ({ ...prev, content: event.target.value }));
     }
@@ -163,12 +182,17 @@ function SeeUserProfile() {
         setNewUserPost(prev => ({ ...prev, letterColorHex: event.target.value }))
     }
 
+    const setColorsInitialState = () => {
+        setNewUserPost(prev => ({ ...prev, backgroundColorHex: '#252525', letterColorHex: '#cbd5e1' }));
+    }
+
     const handleOnSubmitSendPost = async (event: SyntheticEvent) => {
         event.preventDefault();
         let newPost: UserPost = newUserPost;
         newPost.datePosted = new Date();
         newPost.postedBy = authService.getCurrentUser!;
         newPost.postTarget = email!;
+        newPost.feelingId = selectedFeeling?.feelingId!;
         console.log(newPost);
 
         let blankPost: UserPost = {
@@ -178,13 +202,20 @@ function SeeUserProfile() {
             datePosted: new Date(),
             content: '',
             imageURL: '',
-            backgroundColorHex: '',
-            letterColorHex: '',
+            backgroundColorHex: '#252525',
+            letterColorHex: '#cbd5e1',
             feelingId: 1
+        }
+
+        let blankFeeling: Feeling = {
+            feelingId: 1,
+            feelingDescription: 'None',
+            feelingImageURL: ''
         }
 
         await axios.post(`${UserPostURL}`, newPost).then(response => {
             setNewUserPost(blankPost);
+            setSelectedFeeling(blankFeeling);
         });
 
         await axios.get(`${UserPostURL}/GetAllUserPostsByEmail/${email}`).then(response => {
@@ -199,6 +230,7 @@ function SeeUserProfile() {
         getRoomsByEmail();
         checkIsOwnProfile();
         getAllPostsByEmail();
+        getAllFeelings();
         // console.log(email);
     }, []);
 
@@ -433,11 +465,41 @@ function SeeUserProfile() {
                                                                     resize: 'none',
                                                                     width: '100%',
                                                                 }} maxLength={250} onChange={handleOnChangeContent} value={newUserPost.content} />
+                                                                {
+                                                                    selectedFeeling?.feelingDescription === 'None' ?
+                                                                        null :
+                                                                        <div className="flex flex-row mb-3">
+                                                                            <h5 className="text-slate-300 font-bold">I'm Feeling: <span className="text-amber-500">{selectedFeeling?.feelingDescription}</span></h5>
+                                                                            <img src={selectedFeeling?.feelingImageURL} className='w-7 rounded-md ml-2' />
+                                                                        </div>
+                                                                }
                                                                 <div className="flex flex-row p-2">
                                                                     <div className="w-10/12 flex flex-row justify-start gap-3">
-                                                                        <button type="button" onClick={() => setShow(true)} className="btn-secondary w-10"><FontAwesomeIcon icon={faImage} /></button>
-                                                                        <input type='color' className="rounded-lg w-10 p-1 h-full" onChange={handleOnChangeBackgroundColorHex} value={newUserPost.backgroundColorHex} />
-                                                                        <input type='color' className="rounded-lg w-10 p-1 h-full" onChange={handleOnChangeLetterColorHex} value={newUserPost.letterColorHex} />
+                                                                        <button data-tooltip-target="tooltip-default" style={{ borderColor: '#06b6d4', borderWidth: `${newUserPost.imageURL ? '5px' : '0px'}` }} type="button" onClick={() => setShow(true)} className="btn-secondary w-10"><FontAwesomeIcon icon={faImage} /></button>
+                                                                        <div id="tooltip-default" role="tooltip" className="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-black bg-white rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip dark:bg-gray-700">
+                                                                            Post An image
+                                                                            <div className="tooltip-arrow" data-popper-arrow></div>
+                                                                        </div>
+                                                                        <input data-tooltip-target="tooltip-background" type='color' className="rounded-lg w-10 p-1 h-full cursor-pointer" onChange={handleOnChangeBackgroundColorHex} value={newUserPost.backgroundColorHex} />
+                                                                        <div id="tooltip-background" role="tooltip" className="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-black bg-white rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip dark:bg-gray-700">
+                                                                            Background Color
+                                                                            <div className="tooltip-arrow" data-popper-arrow></div>
+                                                                        </div>
+                                                                        <input data-tooltip-target="tooltip-text" type='color' className="rounded-lg w-10 p-1 h-full cursor-pointer" onChange={handleOnChangeLetterColorHex} value={newUserPost.letterColorHex} />
+                                                                        <div id="tooltip-text" role="tooltip" className="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-black bg-white rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip dark:bg-gray-700">
+                                                                            Text Color
+                                                                            <div className="tooltip-arrow" data-popper-arrow></div>
+                                                                        </div>
+                                                                        <button data-tooltip-target="tooltip-feeling" type="button" onClick={() => setShowFeeling(true)} className="btn-secondary w-10"><FontAwesomeIcon icon={faSmileWink} /></button>
+                                                                        <div id="tooltip-feeling" role="tooltip" className="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-black bg-white rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip dark:bg-gray-700">
+                                                                            Feeling
+                                                                            <div className="tooltip-arrow" data-popper-arrow></div>
+                                                                        </div>
+                                                                        <button data-tooltip-target="tooltip-reset" type="button" onClick={() => setColorsInitialState()} className="btn-secondary w-20">Reset</button>
+                                                                        <div id="tooltip-reset" role="tooltip" className="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-black bg-white rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip dark:bg-gray-700">
+                                                                            Reset Colors
+                                                                            <div className="tooltip-arrow" data-popper-arrow></div>
+                                                                        </div>
                                                                     </div>
 
                                                                     <div>
@@ -458,8 +520,8 @@ function SeeUserProfile() {
                                                 <PaginationPost data={userPosts}
                                                     RenderComponent={PostCard}
                                                     pageLimit={0}
-                                                    dataLimit={9} 
-                                                    />
+                                                    dataLimit={9}
+                                                />
                                             )
                                                 :
                                                 <div className="">
@@ -506,6 +568,55 @@ function SeeUserProfile() {
                     </div>
                 </div>
                 : null}
+
+            {
+                showFeeling ?
+                    <div id="modalJoinRoom" aria-hidden="true" className="overflow-y-auto overflow-x-hidden fixed right-0 left-0 top-4 z-50 justify-center items-center h-modal md:h-full md:inset-0 bg-black/50">
+                        <div className="relative px-4 w-full max-w-2xl h-full md:h-auto mx-auto mt-40">
+                            <div className="relative bg-[#505d75] rounded-lg shadow dark:bg-gray-700">
+                                <div className="flex justify-between items-start p-5 rounded-t border-b dark:border-gray-600">
+                                    <h3 className="text-xl font-semibold text-white lg:text-2xl dark:text-white">
+                                        Feelings
+                                    </h3>
+                                    <button type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" onClick={() => setShowFeeling(false)}>
+                                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
+                                    </button>
+                                </div>
+                                <div className="p-6">
+                                    <div className="h-80 overflow-y-auto gap-6">
+                                        {
+                                            feelings?.map((element: Feeling, index: number) => (
+                                                <div key={index} onClick={() => setSelectedFeeling(element)} className='h-11 mb-8 bg-neutral-800 shadow-md shadow-black rounded-lg p-1 ease-in-out duration-300 cursor-pointer hover:bg-neutral-600'>
+                                                    <div className="flex flex-row justify-start">
+                                                        <div className="w-10">
+                                                            {
+                                                                element.feelingImageURL ?
+                                                                    <img src={element.feelingImageURL} className='rounded-md' />
+                                                                    : null
+                                                            }
+                                                        </div>
+
+                                                        <div className="ml-10">
+                                                            <h5 className="font-bold">{element.feelingDescription}</h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))
+                                        }
+                                    </div>
+
+                                    <div className="mb-4">
+                                        <button type="button" onClick={() => setShowFeeling(false)} className="btn-primary">Accept</button>
+                                    </div>
+                                </div>
+                                <div className="flex items-center p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600">
+                                    <button onClick={() => setShowFeeling(false)} type="button" className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-gray-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    : null
+            }
 
         </div >
     )
