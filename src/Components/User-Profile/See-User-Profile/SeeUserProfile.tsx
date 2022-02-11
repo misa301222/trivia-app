@@ -464,7 +464,7 @@ function SeeUserProfile() {
                                                                 <textarea className="form-control mb-3" rows={5} style={{
                                                                     resize: 'none',
                                                                     width: '100%',
-                                                                }} maxLength={250} onChange={handleOnChangeContent} value={newUserPost.content} />
+                                                                }} maxLength={250} onChange={handleOnChangeContent} value={newUserPost.content} placeholder='Type something funny for your friends!' />
                                                                 {
                                                                     selectedFeeling?.feelingDescription === 'None' ?
                                                                         null :
