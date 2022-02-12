@@ -1,8 +1,11 @@
+import { faMinusCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { motion } from "framer-motion";
 import moment from "moment";
 import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 import authService from "../../Services/auth.service";
 
 interface Feeling {
@@ -18,7 +21,8 @@ interface Comment {
     commentContent: string,
     imageURL: string,
     dateComment: Date,
-    commentedByImageURL?: string
+    commentedByImageURL?: string,
+    canEdit?: boolean
 }
 
 const UserProfileURL = 'https://localhost:7025/api/UserProfiles';
@@ -40,6 +44,12 @@ function PostCard({ data }: any) {
     });
     const [comments, setComments] = useState<Comment[]>();
     const [areCommentsHidden, setAreCommentsHidden] = useState<boolean>(true);
+
+    const spring = {
+        type: "spring",
+        stiffness: 700,
+        damping: 30
+    }
 
     const getUserProfileByEmail = async () => {
         await axios.get(`${UserProfileURL}/GetUserProfileByEmail/${data.postedBy}`).then(response => {
@@ -72,13 +82,20 @@ function PostCard({ data }: any) {
             // console.log(userPostId, response.data);
         });
 
+        let currentUser = authService.getCurrentUser;
+
         if (comments) {
             for (let i = 0; i < comments!.length; i++) {
                 await axios.get(`${UserProfileURL}/GetUserProfileByEmail/${comments![i].commentedBy}`).then(response => {
                     comments[i].commentedByImageURL = response.data.imageURL;
-                })
+                });
+                comments[i].canEdit = false;
+                if (currentUser === comments[i].commentedBy || currentUser === data.postTarget) {
+                    comments[i].canEdit = true;
+                }
             }
             setComments(comments);
+            // console.log(comments);
         }
         // console.log(comments);
     }
@@ -88,6 +105,7 @@ function PostCard({ data }: any) {
         let currentUser = authService.getCurrentUser;
 
         let comment: Comment = newComment;
+        comment.userPostId = data.userPostId;
         comment.commentedBy = currentUser!;
         comment.dateComment = new Date();
 
@@ -100,12 +118,37 @@ function PostCard({ data }: any) {
         setAreCommentsHidden(false);
     }
 
+    const deleteCommentById = async (element: Comment) => {
+
+        Swal.fire({
+            title: 'Delete post?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Delete it'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                await axios.delete(`${CommentURL}/${element.commentId}`).then(() => {
+                    Swal.fire(
+                        'Deleted!',
+                        'The post was deleted successfully!',
+                        'success'
+                    ).then(() => {
+                        getCommentsByUserPostId(element.userPostId);
+                    });
+                });
+            }
+        });
+    }
+
     useEffect(() => {
         getUserProfileByEmail();
         getFeelingById(data.feelingId);
         getCommentsByUserPostId(data.userPostId);
         getCurrentUserImage();
-        console.log(data);
+        console.log('d: ' + JSON.stringify(data));
     }, [data]);
 
     return (
@@ -134,7 +177,7 @@ function PostCard({ data }: any) {
                         <div className="w-full">
                             <div className="flex flex-row justify-start">
                                 <Link to={`/seeUserProfile/${data.postedBy}`}>
-                                    <h5 className="text-2xl font-bold text-amber-500 ease-in-out duration-300 hover:text-amber-700">{data.postedBy} - id: {data.userPostId}</h5>
+                                    <h5 className="text-2xl font-bold text-amber-500 ease-in-out duration-300 hover:text-amber-700">{data.postedBy}</h5>
                                 </Link>
 
                             </div>
@@ -209,11 +252,10 @@ function PostCard({ data }: any) {
 
 
 
-                <div className="bg-neutral-800 rounded-md mt-5 p-2">
-
-
+                <motion.div layout transition={spring} className="bg-neutral-800/10 rounded-md mt-5 p-2">
                     <div className="flex flex-col align-middle justify-center mb-5">
-                        <button onClick={() => setAreCommentsHidden(!areCommentsHidden)} type="button" className="m-auto mb-5 btn-tertiary bg-neutral-900">{areCommentsHidden ? 'Show' : 'Hide'} Comments</button>
+                        <button onClick={() => setAreCommentsHidden(!areCommentsHidden)} type="button" className="m-auto mb-5 btn-tertiary bg-neutral-900">
+                            {areCommentsHidden ? 'Show' : 'Hide'} Comments</button>
                         <div className="w-5/6 m-auto border-b border-[1px] border-slate-600 mb-3"></div>
                     </div>
 
@@ -221,19 +263,41 @@ function PostCard({ data }: any) {
                         !areCommentsHidden ?
                             comments?.length ?
                                 comments.map((element: Comment, index: number) => (
-                                    <div key={index} className="flex flex-row w-1/2 m-auto mb-5 bg-neutral-900 p-2 rounded-lg shadow-md shadow-black">
-                                        <div className="w-14 h-14 rounded-full bg-cover mr-10" style={{ backgroundImage: `url(${element.commentedByImageURL})` }}>
-                                        </div>
-
-                                        <div className="flex flex-col">
-                                            <div className="font-bold text-amber-500 ease-in-out duration-300 hover:text-amber-700 cursor-pointer">
-                                                <h5 className="font-bold text-left">{element.commentedBy}</h5>
+                                    <div
+                                        key={index}>
+                                        {
+                                            element.canEdit ?
+                                                <div className="flex flex-row justify-end w-1/2 m-auto mb-2">
+                                                    <button onClick={async () => deleteCommentById(element)} className="w-[2rem] shadow-md shadow-black bg-red-800 ease-in-out duration-300 hover:bg-red-900 hover:text-slate-300 rounded-md p-1 font-bold ml-auto">
+                                                        <FontAwesomeIcon icon={faMinusCircle} /></button>
+                                                </div>
+                                                : null
+                                        }
+                                        <motion.div
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            transition={{
+                                                duration: 2.2,
+                                                type: 'spring'
+                                            }}
+                                            className="flex flex-row w-1/2 m-auto mb-5 bg-neutral-900 p-2 rounded-lg shadow-md shadow-black">
+                                            <div className="w-14 h-14 rounded-full bg-cover mr-10" style={{ backgroundImage: `url(${element.commentedByImageURL})` }}>
                                             </div>
 
-                                            <div className="">
-                                                <h5 className="text-slate-300 text-left font-bold">{element.commentContent}</h5>
+                                            <div className="flex flex-col w-full">
+                                                <div className="font-bold text-amber-500 ease-in-out duration-300 hover:text-amber-700 cursor-pointer">
+                                                    <h5 className="font-bold text-left">{element.commentedBy}</h5>
+                                                </div>
+
+                                                <div className="">
+                                                    <h5 className="text-slate-300 text-left font-bold">{element.commentContent}</h5>
+                                                </div>
+
+                                                <div className="flex flex-row justify-end w-full">
+                                                    <small className="text-slate-300 text-left font-bold">{element.dateComment ? moment(element.dateComment).format('MM/DD/YYYY HH:mm') : null} </small>
+                                                </div>
                                             </div>
-                                        </div>
+                                        </motion.div>
                                     </div>
                                 ))
                                 : <div>
@@ -242,7 +306,7 @@ function PostCard({ data }: any) {
                             :
                             null
                     }
-                </div>
+                </motion.div>
 
             </div>
         </div >

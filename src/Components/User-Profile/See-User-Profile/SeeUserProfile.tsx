@@ -263,17 +263,21 @@ function SeeUserProfile() {
                     <div className="w-[15rem] h-[15rem] bg-cover bg-center bg-no-repeat rounded-full m-auto relative bottom-16 shadow-md shadow-black" style={{
                         backgroundImage: `url(${userProfile?.imageURL})`
                     }}>
-                        <motion.div
-                            whileHover={{
-                                scale: 1.3
-                            }}
+                        {
+                            userProfile?.location ?
+                                <motion.div
+                                    whileHover={{
+                                        scale: 1.3
+                                    }}
 
-                            transition={{
-                                type: 'spring'
-                            }}
-                            className="rounded-lg relative top-2/3 left-full w-fit p-2 bg-slate-300 backdrop-blur-sm shadow-lg shadow-black cursor-default">
-                            <h5 className="text-black font-bold"><FontAwesomeIcon icon={faMapMarkerAlt} className="text-red-700" /> {userProfile?.location}</h5>
-                        </motion.div>
+                                    transition={{
+                                        type: 'spring'
+                                    }}
+                                    className="rounded-lg relative top-2/3 left-full w-fit p-2 bg-slate-300 backdrop-blur-sm shadow-lg shadow-black cursor-default">
+                                    <h5 className="text-black font-bold"><FontAwesomeIcon icon={faMapMarkerAlt} className="text-red-700" /> {userProfile?.location}</h5>
+                                </motion.div>
+                                : null
+                        }
                     </div>
 
                     <div className="relative bottom-16">
@@ -338,52 +342,61 @@ function SeeUserProfile() {
 
                                 className={`p-4 h-[100vh] ${key === 'profile' ? 'fade' : 'hidden'}`} id="profile" role="tabpanel" aria-labelledby="profile-tab">
                                 <div className="container">
-                                    <motion.h1
-                                        initial={{
-                                            opacity: 0,
-                                            x: 300
-                                        }}
+                                    {
+                                        userProfile?.aboutMeHeader ?
+                                            <motion.h1
+                                                initial={{
+                                                    opacity: 0,
+                                                    x: 300
+                                                }}
 
-                                        whileInView={{
-                                            opacity: 1,
-                                            x: 0
-                                        }}
+                                                whileInView={{
+                                                    opacity: 1,
+                                                    x: 0
+                                                }}
 
-                                        viewport={{
-                                            once: true
-                                        }}
-                                        transition={{
-                                            duration: 1,
-                                            type: 'spring',
-                                            bounce: 0.4
-                                        }}
-                                        className="font-bold text-red-700 bg-neutral-900 rounded-lg p-5 mb-10 shadow-lg shadow-black">{userProfile?.aboutMeHeader}</motion.h1>
+                                                viewport={{
+                                                    once: true
+                                                }}
+                                                transition={{
+                                                    duration: 1,
+                                                    type: 'spring',
+                                                    bounce: 0.4
+                                                }}
+                                                className="font-bold text-red-700 bg-neutral-900 rounded-lg p-5 mb-10 shadow-lg shadow-black">{userProfile?.aboutMeHeader}</motion.h1>
+                                            : null
+                                    }
 
-                                    <motion.div
-                                        initial={{
-                                            scale: 0,
-                                            opacity: 0,
-                                            x: 0
-                                        }}
+                                    {
+                                        userProfile?.aboutMeDescription ?
+                                            <motion.div
+                                                initial={{
+                                                    scale: 0,
+                                                    opacity: 0,
+                                                    x: 0
+                                                }}
 
-                                        whileInView={{
-                                            scale: 1,
-                                            opacity: 1,
-                                            x: 0
-                                        }}
+                                                whileInView={{
+                                                    scale: 1,
+                                                    opacity: 1,
+                                                    x: 0
+                                                }}
 
-                                        viewport={{
-                                            once: true
-                                        }}
-                                        transition={{
-                                            duration: 1,
-                                            type: 'spring',
-                                            bounce: 0.4
-                                        }}
-                                        className="bg-gradient-to-r from-neutral-900 to-orange-900/30 w-1/2 m-auto p-5 shadow-lg shadow-black">
-                                        <p className="text-left font-bold text-slate-100">{userProfile?.aboutMeDescription}</p>
-                                    </motion.div>
+                                                viewport={{
+                                                    once: true
+                                                }}
+                                                transition={{
+                                                    duration: 1,
+                                                    type: 'spring',
+                                                    bounce: 0.4
+                                                }}
+                                                className="bg-gradient-to-r from-neutral-900 to-orange-900/30 w-1/2 m-auto p-5 shadow-lg shadow-black">
+                                                <p className="text-left font-bold text-slate-100">{userProfile?.aboutMeDescription}</p>
+                                            </motion.div>
+                                            : null
+                                    }
                                 </div>
+
 
                                 {
                                     rooms?.length ?

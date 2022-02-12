@@ -70,7 +70,7 @@ function PaginationPost({ data, RenderComponent, pageLimit, dataLimit }: any) {
             <div className="">
                 {getPaginatedData().map((element: any, index: any) => (
                     <div key={index} className='w-full'>
-                        {(element.postedBy === authService.getCurrentUser) ?
+                        {(element.postedBy === authService.getCurrentUser) || element.postTarget === authService.getCurrentUser ?
                             <div className="flex flex-row justify-end mb-2">
                                 <button type="button" onClick={async () => deletePost(element.userPostId)}
                                     className="w-[3rem] shadow-md shadow-black bg-red-800 ease-in-out duration-300 hover:bg-red-900 hover:text-slate-300 rounded-md p-1 font-bold ml-auto">
