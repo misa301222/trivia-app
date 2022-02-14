@@ -62,11 +62,13 @@ class AuthService {
         // return <Logout />
     }
 
-    register(username: string, email: string, password: string) {
-        return axios.post(API_URL + "signup", {
-            username,
+    async registerUser(fullName: string, email: string, password: string) {
+        let roles: string[] = ['USER'];
+        return axios.post(API_URL + "/RegisterUser", {
+            fullName,
             email,
-            password
+            password,
+            roles
         });
     }
 

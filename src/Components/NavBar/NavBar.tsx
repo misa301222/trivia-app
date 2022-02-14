@@ -1,13 +1,16 @@
-import { faBook, faHome, faSignOutAlt, faTasks, faUserTie } from "@fortawesome/free-solid-svg-icons";
+import { faBook, faHome, faPlusSquare, faSignInAlt, faSignOutAlt, faTasks, faUser, faUserTie } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import authService from "../../Services/auth.service";
 
 function NavBar() {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+    const [currentUser, setCurrentUser] = useState<string | null>();
 
     useEffect(() => {
         setIsLoggedIn(localStorage.getItem('isLoggedIn') ? true : false);
+        setCurrentUser(authService.getCurrentUser);
     }, [])
 
     return (
@@ -28,15 +31,30 @@ function NavBar() {
                         </Link>
                         {!isLoggedIn ?
                             <Link to="/login" className="block mt-4 lg:inline-block lg:mt-0 mr-4 p-2 text-slate-300 hover:text-amber-400 ease-in-out duration-300">
-                                <h5 className="font-bold ">Login</h5>
+                                <h5 className="font-bold "><FontAwesomeIcon icon={faSignInAlt} /> Login</h5>
                             </Link> : null
                         }
+
+                        {!isLoggedIn ?
+                            <Link to="/register" className="block mt-4 lg:inline-block lg:mt-0 mr-4 p-2 text-slate-300 hover:text-amber-400 ease-in-out duration-300">
+                                <h5 className="font-bold "><FontAwesomeIcon icon={faPlusSquare} /> Create An Account</h5>
+                            </Link> : null
+                        }
+
                         {isLoggedIn ?
                             <Link to="/dashboard" className="block mt-4 lg:inline-block lg:mt-0 mr-4 p-2 text-slate-300 hover:text-amber-400 ease-in-out duration-300">
                                 <h5 className="font-bold "><FontAwesomeIcon icon={faTasks} /> DashBoard</h5>
                             </Link>
                             : null
                         }
+
+                        {isLoggedIn && currentUser ?
+                            <Link to={`/seeUserProfile/${currentUser}`} className="block mt-4 lg:inline-block lg:mt-0 mr-4 p-2 text-slate-300 hover:text-amber-400 ease-in-out duration-300">
+                                <h5 className="font-bold "><FontAwesomeIcon icon={faUser} /> My Profile</h5>
+                            </Link>
+                            : null
+                        }
+
                         {isLoggedIn ?
                             <Link to="/searchUsers" className="block mt-4 lg:inline-block lg:mt-0 mr-4 p-2 text-slate-300 hover:text-amber-400 ease-in-out duration-300">
                                 <h5 className="font-bold"><FontAwesomeIcon icon={faUserTie} /> Users</h5>

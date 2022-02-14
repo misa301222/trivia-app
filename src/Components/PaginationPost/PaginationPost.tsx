@@ -6,8 +6,13 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import authService from "../../Services/auth.service";
 
+interface UserLike {
+    email: string,
+    userPostId: number
+}
 
 const UserPostURL = 'https://localhost:7025/api/UserPosts';
+const UserLikeURL = 'https://localhost:7025/api/UserLikes'
 
 function PaginationPost({ data, RenderComponent, pageLimit, dataLimit }: any) {
     const [pages] = useState(Math.round(data.length / dataLimit));
@@ -38,6 +43,11 @@ function PaginationPost({ data, RenderComponent, pageLimit, dataLimit }: any) {
             confirmButtonText: 'Delete it'
         }).then(async (result) => {
             if (result.isConfirmed) {
+
+                await axios.delete(`${UserLikeURL}/DeleteLikesByUserPostId/${userPostId}`).then(response => {
+                    console.log(response);
+                });
+
                 await axios.delete(`${UserPostURL}/${userPostId}`).then(response => {
                     Swal.fire(
                         'Deleted!',
@@ -73,7 +83,7 @@ function PaginationPost({ data, RenderComponent, pageLimit, dataLimit }: any) {
                         {(element.postedBy === authService.getCurrentUser) || element.postTarget === authService.getCurrentUser ?
                             <div className="flex flex-row justify-end mb-2">
                                 <button type="button" onClick={async () => deletePost(element.userPostId)}
-                                    className="w-[3rem] shadow-md shadow-black bg-red-800 ease-in-out duration-300 hover:bg-red-900 hover:text-slate-300 rounded-md p-1 font-bold ml-auto">
+                                    className="font-bold text-xl text-red-600 hover:text-red-800 ease-in-out duration-300 ml-auto">
                                     <FontAwesomeIcon icon={faMinusCircle} /></button>
                             </div>
                             : null
@@ -92,7 +102,7 @@ function PaginationPost({ data, RenderComponent, pageLimit, dataLimit }: any) {
                     // ))
                 }
 
-                <button disabled={currentPage === pages} onClick={goToNextPage} className={`btn-secondary ${currentPage === pages ? 'disabled' : ''}`}>Next</button>
+                <button disabled={currentPage > pages} onClick={goToNextPage} className={`btn-secondary ${currentPage === pages ? 'disabled' : ''}`}>Next</button>
             </div>
         </div>
     )

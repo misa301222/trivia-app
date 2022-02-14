@@ -47,7 +47,7 @@ function Pagination({ data, RenderComponent, title, pageLimit, dataLimit }: any)
                     ))
                 }
 
-                <button disabled={currentPage === pages} onClick={goToNextPage} className={`btn-secondary ${currentPage === pages ? 'disabled' : ''}`}>Next</button>
+                <button disabled={currentPage > pages} onClick={goToNextPage} className={`btn-secondary ${currentPage === pages ? 'disabled' : ''}`}>Next</button>
             </div>
         </div>
     )
