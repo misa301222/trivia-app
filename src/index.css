@@ -37,6 +37,10 @@ code {
     @apply disabled:opacity-75 disabled:bg-neutral-400 bg-neutral-300 ease-in-out text-black duration-300 hover:text-black hover:bg-neutral-500 w-36 h-10 font-bold shadow-lg shadow-black/50 rounded-lg;
   }
 
+  .btn-tertiary {
+    @apply font-bold text-neutral-200 border-[2px] border-black w-1/2 rounded-lg bg-neutral-800 p-2 ease-in-out duration-300 hover:bg-neutral-900 hover:border-black/50;
+  }
+
   .form-control {
     @apply shadow-lg w-6/12 shadow-black/50 border-0 rounded py-2 px-3 bg-zinc-900 text-slate-300 focus:outline-none font-bold disabled:bg-zinc-700 disabled:text-black disabled:cursor-not-allowed disabled:border-red-700/70 disabled:border-[1px];
   }

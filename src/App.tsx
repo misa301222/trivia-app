@@ -18,6 +18,9 @@ import EditUserProfile from './Components/User-Profile/Edit-User-Profile/EditUse
 import SeeUserProfile from './Components/User-Profile/See-User-Profile/SeeUserProfile';
 import SearchUsers from './Components/Search-Users/SearchUsers';
 import UserManagment from './Components/User-Managment/UserManagment';
+import NotFound from './Components/Not-Found/NotFound';
+import ManageFeelings from './Components/Feelings/Manage-Feelings';
+import Register from './Components/Register/Register';
 
 const Wrapper = ({ children }: any) => {
   const location = useLocation();
@@ -45,6 +48,7 @@ function App() {
             <Routes location={location}>
               <Route path="/" element={<div className='page'><Home /></div>}></Route>
               <Route path="/login" element={<div ref={nodeRef} className='page'><div ref={nodeRef}><Login /></div></div>}></Route>
+              <Route path="/register" element={<div ref={nodeRef} className='page'><Register /></div>}></Route>
               <Route path="/dashboard" element={<RequireAuth redirectTo='/login'><div className='page'><Dashboard /></div></RequireAuth>}></Route>
               <Route path="/seeRooms" element={<RequireAuth redirectTo='/login'><div className='page'><SeeRooms /></div></RequireAuth>}></Route>
               <Route path="/enterRoom/:generatedName/:roomId" element={<RequireAuth redirectTo='/login'><div className='page'><EnterRoom /></div></RequireAuth>}></Route>
@@ -57,7 +61,9 @@ function App() {
               <Route path="/seeUserProfile/:email" element={<RequireAuth redirectTo='/login'><div className='page'><SeeUserProfile /></div></RequireAuth>}></Route>
               <Route path="/manageQuestions" element={<RequireAuth redirectTo='/login'><div className='page'><ManageQuestions /></div></RequireAuth>}></Route>
               <Route path="/userManagment" element={<RequireAuth redirectTo='/login'><div className='page'><UserManagment /></div></RequireAuth>}></Route>
+              <Route path="/manageFeelings" element={<RequireAuth redirectTo='/login'><div className='page'><ManageFeelings/></div></RequireAuth>}></Route>              
               <Route path="/logout" element={<div ref={nodeRef} className='page'><Logout /></div>}></Route>
+              <Route path="*" element={<div className='page'><NotFound /></div>}></Route>
             </Routes>
           </Wrapper>
         </CSSTransition>
