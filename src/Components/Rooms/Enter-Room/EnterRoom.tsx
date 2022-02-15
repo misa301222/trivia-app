@@ -22,7 +22,14 @@ interface UserAnswers {
     question: string,
     answer: string,
     isRight: boolean,
-    userScoreId: number
+    userScoreId: number,
+    firstOption: string,
+    secondOption: string,
+    thirdOption: string,
+    fourthOption: string,
+    fifthOption: string,
+    sixthOption: string,
+    rightAnswer: string
 }
 
 interface UserScore {
@@ -71,7 +78,14 @@ function EnterRoom() {
             question: currentQuestion?.questionName!,
             answer: selectedAnswer,
             isRight: false,
-            userScoreId: 0
+            userScoreId: 0,
+            firstOption: currentQuestion?.firstOption!,
+            secondOption: currentQuestion?.secondOption!,
+            thirdOption: currentQuestion?.thirdOption!,
+            fourthOption: currentQuestion?.fourthOption!,
+            fifthOption: currentQuestion?.fifthOption!,
+            sixthOption: currentQuestion?.sixthOption!,
+            rightAnswer: currentQuestion?.answer!
         }
         console.log(userAnswers);
         setUserAnswers(prev => [...prev, newElement]);
@@ -295,7 +309,6 @@ function EnterRoom() {
                                 }}
                                     state={{
                                         userAnswersProps: userAnswers,
-                                        questions: questions,
                                         userScore: userScore
                                     }}>
                                     <button type="button" className="btn-primary mt-20">See Results</button>

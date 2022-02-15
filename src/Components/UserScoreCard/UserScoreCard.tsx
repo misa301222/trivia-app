@@ -51,14 +51,16 @@ function UserScoreCard({ data }: any) {
             userAnswers = response.data;
         });
 
+        console.log(userAnswers);
+
         let roomId: number = 0;
         await axios.get(`${RoomURL}/GetRoomsByGeneratedName/${generatedName}`).then(response => {
             roomId = response.data.roomId;
         })
 
-        await axios.get(`${QuestionURL}/GetQuestionsByRoomId/${roomId}`).then(response => {
-            questions = response.data;
-        });
+        // await axios.get(`${QuestionURL}/GetQuestionsByRoomId/${roomId}`).then(response => {
+        //     questions = response.data;
+        // });
 
         const element: UserScore = {
             userScoreId: userScoreId,
@@ -73,7 +75,6 @@ function UserScoreCard({ data }: any) {
         navigate('/seeResults', {
             state: {
                 userAnswersProps: userAnswers,
-                questions: questions,
                 userScore: element
             }
         });
