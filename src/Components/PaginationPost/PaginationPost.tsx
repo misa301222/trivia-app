@@ -4,6 +4,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import { ActivityCategory } from "../../constants/enums/ActivityCategory";
 import authService from "../../Services/auth.service";
 
 interface UserLike {
@@ -11,8 +12,17 @@ interface UserLike {
     userPostId: number
 }
 
+interface Activity {
+    activityId: number,
+    email: string,
+    activityDescription: string,
+    category: string,
+    dateActivity: Date
+}
+
 const UserPostURL = 'https://localhost:7025/api/UserPosts';
 const UserLikeURL = 'https://localhost:7025/api/UserLikes'
+const ActivitiesURL = 'https://localhost:7025/api/Activities'
 
 function PaginationPost({ data, RenderComponent, pageLimit, dataLimit }: any) {
     const [pages] = useState(Math.round(data.length / dataLimit));
@@ -57,6 +67,19 @@ function PaginationPost({ data, RenderComponent, pageLimit, dataLimit }: any) {
                         navigate(0);
                     });
                 });
+
+                let activity: Activity = {
+                    activityId: 0,
+                    email: authService.getCurrentUser!,
+                    activityDescription: ActivityCategory.DELETED_POST,
+                    category: 'POST',
+                    dateActivity: new Date()
+                }
+
+                await axios.post(`${ActivitiesURL}/`, activity).then(response => {
+                    console.log(response);
+                });
+
             }
         })
     }

@@ -35,7 +35,7 @@ function Results({ userAnswersFinal, userScoreFinal }: any) {
                             <div className="mt-5 mb-16">
                                 {
                                     element.firstOption ?
-                                        <div className={`bg-slate-200/60 rounded-md p-3 font-bold border-2 ${userAnswersFinal![index].answer.trim() === element.firstOption.trim() && userAnswersFinal![index].answer.trim() === element.answer.trim() ? 'border-4 border-green-900 bg-green-500/75' : `${element.firstOption.trim() === element.answer.trim() ? 'border-4 border-red-900 bg-red-500/75' : 'border-black'}`}`}>
+                                        <div className={`bg-slate-200/60 rounded-md p-3 font-bold border-2 ${element.answer === element.rightAnswer.trim() && element.firstOption.trim() === element.rightAnswer.trim() ? 'border-4 border-green-900 bg-green-500/75' : `${element.firstOption.trim() === element.rightAnswer.trim() ? 'border-4 border-red-900 bg-red-500/75' : 'border-black'}`}`}>
                                             <div className="">
                                                 <h5>{element.firstOption}</h5>
                                             </div>
@@ -45,7 +45,7 @@ function Results({ userAnswersFinal, userScoreFinal }: any) {
 
                                 {
                                     element.secondOption ?
-                                        <div className={`bg-slate-200/60 rounded-md p-3 font-bold border-2 ${userAnswersFinal![index].answer.trim() === element.secondOption.trim() && userAnswersFinal![index].answer.trim() === element.answer.trim() ? 'border-4 border-green-900 bg-green-500/75' : `${element.secondOption.trim() === element.answer.trim() ? 'border-4 border-red-900 bg-red-500/75' : 'border-black'}`}`}>
+                                        <div className={`bg-slate-200/60 rounded-md p-3 font-bold border-2 ${element.answer === element.rightAnswer.trim() && element.secondOption.trim() === element.rightAnswer.trim() ? 'border-4 border-green-900 bg-green-500/75' : `${element.secondOption.trim() === element.rightAnswer.trim() ? 'border-4 border-red-900 bg-red-500/75' : 'border-black'}`}`}>
                                             <div className="">
                                                 <h5>{element.secondOption}</h5>
                                             </div>
@@ -55,7 +55,7 @@ function Results({ userAnswersFinal, userScoreFinal }: any) {
 
                                 {
                                     element.thirdOption ?
-                                        <div className={`bg-slate-200/60 rounded-md p-3 font-bold border-2 ${userAnswersFinal![index].answer.trim() === element.thirdOption.trim() && userAnswersFinal![index].answer.trim() === element.answer.trim() ? 'border-4 border-green-900 bg-green-500/75' : `${element.thirdOption.trim() === element.answer.trim() ? 'border-4 border-red-900 bg-red-500/75' : 'border-black'}`}`}>
+                                        <div className={`bg-slate-200/60 rounded-md p-3 font-bold border-2 ${element.answer === element.rightAnswer.trim() && element.thirdOption.trim() === element.rightAnswer.trim() ? 'border-4 border-green-900 bg-green-500/75' : `${element.thirdOption.trim() === element.rightAnswer.trim() ? 'border-4 border-red-900 bg-red-500/75' : 'border-black'}`}`}>
 
                                             <div className="">
                                                 <h5>{element.thirdOption}</h5>
@@ -66,7 +66,7 @@ function Results({ userAnswersFinal, userScoreFinal }: any) {
 
                                 {
                                     element.fourthOption ?
-                                        <div className={`bg-slate-200/60 rounded-md p-3 font-bold border-2 ${userAnswersFinal![index].answer.trim() === element.fourthOption.trim() && userAnswersFinal![index].answer.trim() === element.answer.trim() ? 'border-4 border-green-900 bg-green-500/75' : `${element.fourthOption.trim() === element.answer.trim() ? 'border-4 border-red-900 bg-red-500/75' : 'border-black'}`}`}>
+                                        <div className={`bg-slate-200/60 rounded-md p-3 font-bold border-2 ${element.answer === element.rightAnswer.trim() && element.fourthOption.trim() === element.rightAnswer.trim() ? 'border-4 border-green-900 bg-green-500/75' : `${element.fourthOption.trim() === element.rightAnswer.trim() ? 'border-4 border-red-900 bg-red-500/75' : 'border-black'}`}`}>
 
                                             <div className="">
                                                 <h5>{element.fourthOption}</h5>
@@ -77,7 +77,7 @@ function Results({ userAnswersFinal, userScoreFinal }: any) {
 
                                 {
                                     element.fifthOption ?
-                                        <div className={`bg-slate-200/60 rounded-md p-3 font-bold border-2 ${userAnswersFinal![index].answer.trim() === element.fifthOption.trim() && userAnswersFinal![index].answer.trim() === element.answer.trim() ? 'border-4 border-green-900 bg-green-500/75' : `${element.fifthOption.trim() === element.answer.trim() ? 'border-4 border-red-900 bg-red-500/75' : 'border-black'}`}`}>
+                                        <div className={`bg-slate-200/60 rounded-md p-3 font-bold border-2 ${element.answer === element.rightAnswer.trim() && element.fifthOption.trim() === element.rightAnswer.trim() ? 'border-4 border-green-900 bg-green-500/75' : `${element.fifthOption.trim() === element.rightAnswer.trim() ? 'border-4 border-red-900 bg-red-500/75' : 'border-black'}`}`}>
 
                                             <div className="">
                                                 <h5>{element.fifthOption}</h5>
@@ -88,7 +88,7 @@ function Results({ userAnswersFinal, userScoreFinal }: any) {
 
                                 {
                                     element.sixthOption ?
-                                        <div className={`bg-slate-200/60 rounded-md p-3 font-bold border-2 ${userAnswersFinal![index].answer.trim() === element.sixthOption.trim() && userAnswersFinal![index].answer.trim() === element.answer.trim() ? 'border-4 border-green-900 bg-green-500/75' : `${element.sixthOption.trim() === element.answer.trim() ? 'border-4 border-red-900 bg-red-500/75' : 'border-black'}`}`}>
+                                        <div className={`bg-slate-200/60 rounded-md p-3 font-bold border-2 ${element.answer === element.rightAnswer.trim() && element.sixthOption.trim() === element.rightAnswer.trim() ? 'border-4 border-green-900 bg-green-500/75' : `${element.sixthOption.trim() === element.rightAnswer.trim() ? 'border-4 border-red-900 bg-red-500/75' : 'border-black'}`}`}>
 
                                             <div className="">
                                                 <h5>{element.sixthOption}</h5>
@@ -97,7 +97,7 @@ function Results({ userAnswersFinal, userScoreFinal }: any) {
                                         : null
                                 }
                                 <div className="bg-white rounded-lg border-2 border-black font-bold p-2">
-                                    <h5>The right answer was {element.answer} <FontAwesomeIcon icon={faCheckDouble} /></h5>
+                                    <h5>The right answer was {element.rightAnswer} <FontAwesomeIcon icon={faCheckDouble} /></h5>
                                     <h5>You answered <u>{userAnswersFinal![index].answer}</u></h5>
                                     <h5>So you are {userAnswersFinal![index].isRight ? `RIGHT!` : `WRONG!`}</h5>
                                 </div>

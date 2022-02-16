@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
 import Swal from "sweetalert2";
+import { ActivityCategory } from "../../../constants/enums/ActivityCategory";
 import authService from "../../../Services/auth.service";
 
 interface User {
@@ -20,7 +21,16 @@ interface UserProfile {
     aboutMeDescription: string
 }
 
+interface Activity {
+    activityId: number,
+    email: string,
+    activityDescription: string,
+    category: string,
+    dateActivity: Date
+}
+
 const UserProfileURL = 'https://localhost:7025/api/UserProfiles';
+const ActivitiesURL = 'https://localhost:7025/api/Activities'
 
 function EditUserProfile() {
     const [userProfile, setUserProfile] = useState<UserProfile>({
@@ -69,6 +79,18 @@ function EditUserProfile() {
                 showConfirmButton: false,
                 timer: 900
             });
+        });
+
+        let activity: Activity = {
+            activityId: 0,
+            email: authService.getCurrentUser!,
+            activityDescription: ActivityCategory.EDITED_USER_PROFILE,
+            category: 'USER PROFILE',
+            dateActivity: new Date()
+        }
+
+        await axios.post(`${ActivitiesURL}/`, activity).then(response => {
+            console.log(response);
         });
     }
 

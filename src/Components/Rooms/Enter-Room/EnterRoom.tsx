@@ -4,6 +4,8 @@ import axios from "axios";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { ActivityCategory } from "../../../constants/enums/ActivityCategory";
+import authService from "../../../Services/auth.service";
 
 
 interface Question {
@@ -41,9 +43,18 @@ interface UserScore {
     dateSent: Date
 }
 
+interface Activity {
+    activityId: number,
+    email: string,
+    activityDescription: string,
+    category: string,
+    dateActivity: Date
+}
+
 const QuestionURL = 'https://localhost:7025/api/Questions';
 const UserScoreURL = 'https://localhost:7025/api/UserScores';
 const UserAnswersURL = 'https://localhost:7025/api/UserAnswers';
+const ActivitiesURL = 'https://localhost:7025/api/Activities'
 
 function EnterRoom() {
     const { generatedName } = useParams();
@@ -101,6 +112,17 @@ function EnterRoom() {
             let userAnswersFinal: UserAnswers[] = userAnswers;
             userAnswersFinal.push(newElement);
             await calculateScore(userAnswersFinal);
+            let activity: Activity = {
+                activityId: 0,
+                email: authService.getCurrentUser!,
+                activityDescription: ActivityCategory.SCORE,
+                category: 'SCORE',
+                dateActivity: new Date()
+            }
+
+            await axios.post(`${ActivitiesURL}/`, activity).then(response => {
+                console.log(response);
+            });
         }
     }
 
@@ -139,7 +161,6 @@ function EnterRoom() {
                 userScoreId = response.data.userScoreId;
             });
 
-            console.log('id: ' + userScoreId!);
             for (let i = 0; i < userAnswersFinal.length; i++) {
                 userAnswersFinal[i].userScoreId = userScoreId!;
                 await axios.post(`${UserAnswersURL}/`, userAnswersFinal[i]).then(response => {
