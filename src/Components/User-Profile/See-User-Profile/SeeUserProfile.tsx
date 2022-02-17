@@ -268,7 +268,7 @@ function SeeUserProfile() {
                         y: 100
                     }}
 
-                    whileInView={{
+                    animate={{
                         opacity: 1,
                         y: 0
                     }}
@@ -278,7 +278,8 @@ function SeeUserProfile() {
                     }}
 
                     transition={{
-                        duration: 2,
+                        duration: 3,
+                        delay: 0.3,
                         type: 'spring',
                         bounce: 0.8
                     }}

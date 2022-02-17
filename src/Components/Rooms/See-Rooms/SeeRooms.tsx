@@ -1,14 +1,26 @@
-import { faFire } from "@fortawesome/free-solid-svg-icons";
+import { faFire, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import moment from "moment";
-import { useEffect, useState } from "react";
+import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
 import Swal from "sweetalert2";
+import { ActivityCategory } from "../../../constants/enums/ActivityCategory";
 import authService from "../../../Services/auth.service";
 
+interface Activity {
+    activityId: number,
+    email: string,
+    activityDescription: string,
+    category: string,
+    dateActivity: Date
+}
+
 const RoomURL = 'https://localhost:7025/api/Rooms';
+const ActivitiesURL = 'https://localhost:7025/api/Activities'
+const QuestionURL = 'https://localhost:7025/api/Questions';
 
 interface Room {
+    roomId: string,
     generatedName: string,
     createdBy: string,
     dateCreated: Date
@@ -23,6 +35,12 @@ interface User {
 function SeeRooms() {
     const [roomsCreatedByUser, setRoomsCreatedByUser] = useState<Room[]>();
     const [showDelete, setShowDelete] = useState<boolean>(false);
+    const [roomToDelete, setRoomToDelete] = useState<string>('');
+
+    const showDeleteModal = () => {
+        setRoomToDelete('');
+        setShowDelete(true);
+    }
 
     const getRoomsCreatedByUser = async () => {
         let user: User = authService.getUser;
@@ -30,7 +48,6 @@ function SeeRooms() {
             let email: string = user.email;
             await axios.get(`${RoomURL}/GetRoomsByEmail/${email}`).then(response => {
                 setRoomsCreatedByUser(response.data);
-                // console.log(response.data);
             });
         }
     }
@@ -44,6 +61,61 @@ function SeeRooms() {
             showConfirmButton: false,
             timer: 900
         });
+    }
+
+    const handleOnChangeRoomToDelete = (event: ChangeEvent<HTMLInputElement>) => {
+        setRoomToDelete(event.target.value);
+    }
+
+    const handleOnSubmitDeleteRoom = async (event: SyntheticEvent) => {
+        event.preventDefault();
+        if (roomToDelete) {
+            let room: Room = {
+                roomId: '',
+                generatedName: '',
+                dateCreated: new Date,
+                createdBy: ''
+            };
+
+            await axios.get(`${RoomURL}/GetRoomsByGeneratedName/${roomToDelete}`).then(response => {
+                room = response.data;
+            });
+
+            if (room.roomId) {                
+                await axios.delete(`${QuestionURL}/DeleteQuestionsByRoomId/${room.roomId}`);
+                await axios.delete(`${RoomURL}/${room.roomId}`);
+
+                let activity: Activity = {
+                    activityId: 0,
+                    email: authService.getCurrentUser!,
+                    activityDescription: ActivityCategory.DELETED_ROOM,
+                    category: 'ROOM',
+                    dateActivity: new Date()
+                }
+
+                await axios.post(`${ActivitiesURL}/`, activity).then(response => {
+                    console.log(response);
+                });                
+
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Room Deleted Succesfully!',
+                    showConfirmButton: true,            
+                }).then(() => {
+                    setRoomToDelete('');
+                    getRoomsCreatedByUser();
+                });
+                
+            } else {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'warning',
+                    title: 'That Room does not exists!',
+                    showConfirmButton: true,
+                });
+            }
+        }
     }
 
     useEffect(() => {
@@ -63,7 +135,7 @@ function SeeRooms() {
                     </div>
 
                     <div className="flex flex-row justify-end w-full">
-                        <button onClick={() => setShowDelete(true)} className="font-bold bg-red-800 p-2 rounded-lg shadow-md shadow-black ease-in-out duration-300 hover:text-neutral-200 hover:bg-red-900">Delete Room</button>
+                        <button onClick={() => showDeleteModal()} className="font-bold bg-red-800 p-2 rounded-lg shadow-md shadow-black ease-in-out duration-300 hover:text-neutral-200 hover:bg-red-900">Delete Room</button>
                     </div>
                 </div>
 
@@ -115,8 +187,15 @@ function SeeRooms() {
                                     </button>
                                 </div>
                                 <div className="p-6">
-                                    <form>
+                                    <form onSubmit={handleOnSubmitDeleteRoom}>
+                                        <div className="mb-3">
+                                            <label className="block font-bold text-slate-300 text-2xl">Room Name</label>
+                                            <input value={roomToDelete} onChange={handleOnChangeRoomToDelete} className='form-control' type='text' maxLength={250} />
+                                        </div>
 
+                                        <div className="mb-3">
+                                            <button disabled={!roomToDelete.length} className="btn-danger"><FontAwesomeIcon icon={faTrash} /> Delete</button>
+                                        </div>
                                     </form>
                                 </div>
                                 <div className="flex items-center p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600">

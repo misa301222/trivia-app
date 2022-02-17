@@ -418,8 +418,11 @@ function PostCard({ data }: any) {
                                                 </div>
 
                                                 <div className="flex flex-col w-full">
+
                                                     <div className="font-bold text-amber-500 ease-in-out duration-300 hover:text-amber-700 cursor-pointer">
-                                                        <h5 className="font-bold text-left">{element.commentedBy}</h5>
+                                                        <Link to={`/seeUserProfile/${element.commentedBy}`}>
+                                                            <h5 className="font-bold text-left">{element.commentedBy}</h5>
+                                                        </Link>
                                                     </div>
 
                                                     <div className="">

@@ -282,9 +282,11 @@ function Dashboard() {
                                                     : null
                                             }
 
-{
+                                            {
                                                 element.category === 'ROOM' ?
-                                                    <FontAwesomeIcon icon={faDoorClosed} className='text-orange-400 text-xl' />
+                                                    element.activityDescription === 'Deleted a Room' ?
+                                                        <FontAwesomeIcon icon={faTrashAlt} className='text-red-700 text-xl' />
+                                                        : <FontAwesomeIcon icon={faDoorClosed} className='text-orange-400 text-xl' />
                                                     : null
                                             }
 
