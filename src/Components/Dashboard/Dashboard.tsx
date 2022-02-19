@@ -1,4 +1,4 @@
-import { faChartLine, faCogs, faComment, faCommentSlash, faDoorClosed, faDoorOpen, faEdit, faEye, faHeart, faHeartBroken, faListUl, faNewspaper, faPlusSquare, faQuestion, faStar, faStarHalfAlt, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { faChartLine, faCogs, faComment, faCommentSlash, faCompass, faDoorClosed, faDoorOpen, faEdit, faEye, faHeart, faHeartBroken, faListUl, faNewspaper, faPlusSquare, faQuestion, faStar, faStarHalfAlt, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import moment from "moment";
@@ -165,6 +165,12 @@ function Dashboard() {
 
                 <div className="w-64 h-10 rounded-lg cursor-default shadow-lg shadow-orange-500/50 text-orange-500 bg-neutral-900 ease-in-out duration-300 hover:scale-110 hover:text-cyan-500 hover:shadow-cyan-500/50">
                     <h5 className="pt-1 text-xl font-bold"><FontAwesomeIcon icon={faListUl} /> {user?.roles}</h5>
+                </div>
+
+                <div className="ml-auto mr-40">
+                    <Link to="/explore">
+                        <button className="btn-secondary" type="button"> <FontAwesomeIcon icon={faCompass} className="text-xl" /> Explore</button>
+                    </Link>
                 </div>
             </div>
 
