@@ -1,5 +1,6 @@
 import { faPlusSquare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import axios from "axios";
 import { ChangeEvent, SyntheticEvent, useState } from "react";
 import Swal from "sweetalert2";
 import authService from "../../Services/auth.service";
@@ -9,6 +10,24 @@ interface User {
     email: string,
     password: string
 }
+
+interface UserProfile {
+    email: string,
+    imageURL: string,
+    coverURL: string,
+    location: string,
+    aboutMeHeader: string,
+    aboutMeDescription: string
+}
+
+interface AnimalConfig {
+    animalConfigId: number,
+    email: string,
+    animal: string
+}
+
+const UserProfileURL = 'https://localhost:7025/api/UserProfiles';
+const AnimalConfigsURL = 'https://localhost:7025/api/AnimalConfigs';
 
 function Register() {
     const [user, setUser] = useState<User>({
@@ -45,8 +64,29 @@ function Register() {
                         icon: 'success',
                         title: 'Registered Succesfully!',
                         showConfirmButton: true,
-                    }).then(() => {
+                    }).then(async () => {
                         setUser(emptyUser);
+
+                        let animalConfig: AnimalConfig = {
+                            animalConfigId: 0,
+                            email: user.email,
+                            animal: 'None'
+                        }
+                        await axios.post(`${AnimalConfigsURL}/`, animalConfig).then(response => {
+                            console.log(response);
+                        });
+
+                        let userProfile: UserProfile = {
+                            email: user.email,
+                            imageURL: '',
+                            coverURL: '',
+                            location: '',
+                            aboutMeHeader: '',
+                            aboutMeDescription: '',
+                        }
+                        await axios.post(`${UserProfileURL}`, userProfile).then(response => {
+
+                        });
                     });
                     break;
 

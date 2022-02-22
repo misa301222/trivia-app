@@ -191,6 +191,8 @@ function PostCard({ data }: any) {
             await axios.get(`${UserLikeURL}/GetLikeByEmailAndUserPostId/${email}/${userPostId}`).then(response => {
                 if (response.data) {
                     setIsLiked(true);
+                } else {
+                    setIsLiked(false);
                 }
             });
         }

@@ -1,6 +1,7 @@
 import { faCompass, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
+import { motion } from "framer-motion";
 import moment from "moment";
 import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
 import Swal from "sweetalert2";
@@ -9,10 +10,12 @@ interface Room {
     roomId: number,
     generatedName: string,
     createdBy: string,
-    dateCreated: Date
+    dateCreated: Date,
+    questionQuantity?: number
 }
 
 const RoomURL = 'https://localhost:7025/api/Rooms';
+const QuestionURL = 'https://localhost:7025/api/Questions';
 
 function Explore() {
     const [lastRooms, setLastRooms] = useState<Room[]>();
@@ -20,19 +23,38 @@ function Explore() {
     const [search, setSearch] = useState<string>('');
 
     const getLastFiveCreatedRooms = async () => {
+        let rooms: Room[];
         await axios.get(`${RoomURL}/GetLastFiveCreatedRooms`).then(response => {
-            setLastRooms(response.data);
+            rooms = response.data;
         });
+
+        if (rooms!) {
+            for (let i = 0; i < rooms.length; i++) {
+                await axios.get(`${QuestionURL}/GetQuestionsByRoomId/${rooms[i].roomId}`).then(response => {
+                    rooms[i].questionQuantity = response.data.length;
+                });
+            }
+
+            setLastRooms(rooms);
+        }
     }
 
     const handleOnSubmitSearch = async (event: SyntheticEvent) => {
         event.preventDefault();
-
+        let rooms: Room[];
         await axios.get(`${RoomURL}/GetRoomsByEmailLike/${search}`).then(response => {
-            setRooms(response.data);
+            rooms = response.data;
         });
 
-        // setSearch('');
+        if (rooms!) {
+            for (let i = 0; i < rooms.length; i++) {
+                await axios.get(`${QuestionURL}/GetQuestionsByRoomId/${rooms[i].roomId}`).then(response => {
+                    rooms[i].questionQuantity = response.data.length;
+                });
+            }
+
+            setRooms(rooms);
+        }
     }
 
     const handleCopiedText = (generatedName: string) => {
@@ -61,7 +83,7 @@ function Explore() {
             </div>
 
             <div className="mt-20">
-                <h2 className="header">Last Created Rooms</h2>
+                <h2 className="header text-amber-500">Last Created Rooms</h2>
             </div>
 
             <div className="flex flex-wrap mt-20 gap-14 mb-40">
@@ -76,8 +98,16 @@ function Explore() {
                                     <h5 className="font-bold text-3xl text-slate-300">{element.generatedName}</h5>
                                 </div>
 
-                                <div className="mb-4">
+                                <div className="mb-2">
                                     <h5 className="font-bold text-xl">{element.dateCreated ? moment(element.dateCreated).format('MM/DD/YYYY HH:mm') : null}</h5>
+                                </div>
+
+                                <div className="p-2">
+                                    <h5 className="font-bold text-xl ">By: {element.createdBy}</h5>
+                                </div>
+
+                                <div className="mt-1">
+                                    <h5 className="font-bold text-xl text-red-400">Total Questions: {element.questionQuantity}</h5>
                                 </div>
                             </div>
                         </div>
@@ -86,7 +116,7 @@ function Explore() {
             </div>
 
             <div className="mt-10">
-                <h2 className="header">Search by Username</h2>
+                <h2 className="header text-amber-500">Search by Username</h2>
             </div>
 
             <form onSubmit={handleOnSubmitSearch} className="w-7/12 m-auto mt-10 h-[7rem] bg-neutral-700 shadow-lg shadow-black flex flex-col align-middle justify-center">
@@ -101,10 +131,26 @@ function Explore() {
                 </div>
             </form>
 
-            <div className="flex flex-wrap mt-20 gap-14">
+            <div className="flex flex-wrap mt-20 gap-14 overflow-y-auto h-[40rem] mb-40">
                 {
                     rooms?.map((element: Room, index: number) => (
-                        <div key={index} className="h-60 bg-neutral-900 w-56 shadow-md shadow-black cursor-pointer ease-in-out duration-300 hover:scale-110" onClick={() => handleCopiedText(element.generatedName)}>
+                        <motion.div
+                            initial={{
+                                opacity: 0
+                            }}
+
+                            animate={{
+                                opacity: 1
+                            }}
+
+                            whileHover={{
+                                scale: 1.1
+                            }}
+
+                            transition={{
+                                type: 'spring',
+                            }}
+                            key={index} className="h-60 bg-neutral-900 w-56 shadow-md shadow-black cursor-pointer ease-in-out duration-300 hover:scale-110" onClick={() => handleCopiedText(element.generatedName)}>
                             <div className="flex flex-col justify-center">
                                 <div className=" mt-1">
                                     <h5 className="font-bold text-xl text-cyan-500">Room Name</h5>
@@ -116,8 +162,12 @@ function Explore() {
                                 <div className="mb-4">
                                     <h5 className="font-bold text-xl">{element.dateCreated ? moment(element.dateCreated).format('MM/DD/YYYY HH:mm') : null}</h5>
                                 </div>
+
+                                <div className="mt-16">
+                                    <h5 className="font-bold text-xl text-red-400">Total Questions: {element.questionQuantity}</h5>
+                                </div>
                             </div>
-                        </div>
+                        </motion.div>
                     ))
                 }
             </div>

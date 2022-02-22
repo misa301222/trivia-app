@@ -23,7 +23,8 @@ interface Room {
     roomId: string,
     generatedName: string,
     createdBy: string,
-    dateCreated: Date
+    dateCreated: Date,
+    questionQuantity?: number
 }
 
 interface User {
@@ -46,9 +47,21 @@ function SeeRooms() {
         let user: User = authService.getUser;
         if (user?.email) {
             let email: string = user.email;
+            let rooms: Room[];
             await axios.get(`${RoomURL}/GetRoomsByEmail/${email}`).then(response => {
-                setRoomsCreatedByUser(response.data);
+                rooms = response.data;
             });
+
+            if (rooms!) {
+                for (let i = 0; i < rooms.length; i++) {
+                    await axios.get(`${QuestionURL}/GetQuestionsByRoomId/${rooms[i].roomId}`).then(response => {
+                        rooms[i].questionQuantity = response.data.length;
+                    });
+                }
+
+                setRoomsCreatedByUser(rooms);
+            }
+
         }
     }
 
@@ -81,7 +94,7 @@ function SeeRooms() {
                 room = response.data;
             });
 
-            if (room.roomId) {                
+            if (room.roomId) {
                 await axios.delete(`${QuestionURL}/DeleteQuestionsByRoomId/${room.roomId}`);
                 await axios.delete(`${RoomURL}/${room.roomId}`);
 
@@ -95,18 +108,18 @@ function SeeRooms() {
 
                 await axios.post(`${ActivitiesURL}/`, activity).then(response => {
                     console.log(response);
-                });                
+                });
 
                 Swal.fire({
                     position: 'center',
                     icon: 'success',
                     title: 'Room Deleted Succesfully!',
-                    showConfirmButton: true,            
+                    showConfirmButton: true,
                 }).then(() => {
                     setRoomToDelete('');
                     getRoomsCreatedByUser();
                 });
-                
+
             } else {
                 Swal.fire({
                     position: 'center',
@@ -154,6 +167,10 @@ function SeeRooms() {
 
                                         <div className="mb-4">
                                             <h5 className="font-bold text-xl">{element.dateCreated ? moment(element.dateCreated).format('MM/DD/YYYY HH:mm') : null}</h5>
+                                        </div>
+
+                                        <div className="mt-16">
+                                            <h5 className="font-bold text-xl">Total Questions: {element.questionQuantity}</h5>
                                         </div>
                                     </div>
                                 </div>
