@@ -1,3 +1,5 @@
+import { motion } from "framer-motion";
+
 function Duck() {
     return (
         <svg width="442" height="413" viewBox="0 -70 250 380" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -14,9 +16,39 @@ function Duck() {
                 <ellipse id="Ellipse 8" cx="188.5" cy="92" rx="2.5" ry="2" fill="white" />
                 <ellipse id="Ellipse 9" cx="61.5" cy="112" rx="15.5" ry="5" fill="#FEB8B8" />
                 <ellipse id="Ellipse 10" cx="191.5" cy="112" rx="15.5" ry="5" fill="#FEB8B8" />
-                <rect id="Rectangle 1" x="116.25" y="172.25" width="20.5" height="14.5" rx="3.75" fill="#E15B5B" stroke="black" strokeWidth="0.5" />
-                <path id="Polygon 1" d="M138.125 177.484L148.625 171.422C149.792 170.749 151.25 171.591 151.25 172.938V185.062C151.25 186.409 149.792 187.251 148.625 186.578L138.125 180.516C136.958 179.842 136.958 178.158 138.125 177.484Z" fill="#E15B5B" stroke="black" strokeWidth="0.5" />
-                <path id="Polygon 2" d="M114.875 177.484L104.375 171.422C103.208 170.749 101.75 171.591 101.75 172.938V185.062C101.75 186.409 103.208 187.251 104.375 186.578L114.875 180.516C116.042 179.842 116.042 178.158 114.875 177.484Z" fill="#E15B5B" stroke="black" strokeWidth="0.5" />
+                <motion.rect
+                    animate={{
+                        rotate: [0, 0, -10, 0, 10, 0],
+                    }}
+
+                    transition={{
+                        type: 'spring',
+                        repeat: Infinity,
+                        duration: 2
+                    }}
+                    id="Rectangle 1" x="116.25" y="172.25" width="20.5" height="14.5" rx="3.75" fill="#E15B5B" stroke="black" strokeWidth="0.5" />
+                <motion.path
+                    animate={{
+                        rotate: [0, 0, -10, 0, 10, 0],
+                    }}
+
+                    transition={{
+                        type: 'spring',
+                        repeat: Infinity,
+                        duration: 2
+                    }}
+                    id="Polygon 1" d="M138.125 177.484L148.625 171.422C149.792 170.749 151.25 171.591 151.25 172.938V185.062C151.25 186.409 149.792 187.251 148.625 186.578L138.125 180.516C136.958 179.842 136.958 178.158 138.125 177.484Z" fill="#E15B5B" stroke="black" strokeWidth="0.5" />
+                <motion.path
+                    animate={{
+                        rotate: [0, 0, -10, 0, 10, 0],
+                    }}
+
+                    transition={{
+                        type: 'spring',
+                        repeat: Infinity,
+                        duration: 2
+                    }}
+                    id="Polygon 2" d="M114.875 177.484L104.375 171.422C103.208 170.749 101.75 171.591 101.75 172.938V185.062C101.75 186.409 103.208 187.251 104.375 186.578L114.875 180.516C116.042 179.842 116.042 178.158 114.875 177.484Z" fill="#E15B5B" stroke="black" strokeWidth="0.5" />
                 <g id="Vector 2">
                     <path d="M53.1072 60.4842C55.9455 47.1904 62.2726 45.2214 82 52C64.561 50.6622 58.3491 52.6062 53.1072 60.4842Z" fill="#AF8A6F" />
                     <path d="M53 61C53.0352 60.8262 53.0709 60.6543 53.1072 60.4842M53.1072 60.4842C55.9455 47.1904 62.2726 45.2214 82 52C64.561 50.6622 58.3491 52.6062 53.1072 60.4842Z" stroke="black" />

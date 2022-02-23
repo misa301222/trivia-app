@@ -60,6 +60,7 @@ function EditFavoriteAnimal() {
                             <option value={"None"}>None</option>
                             <option value={"Cat"}>Cat</option>
                             <option value={"Duck"}>Duck</option>
+                            <option value={"Dog"}>Dog</option>
                         </select>
                     </div>
 

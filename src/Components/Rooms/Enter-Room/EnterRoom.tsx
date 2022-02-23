@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ActivityCategory } from "../../../constants/enums/ActivityCategory";
 import Cat from "../../../resources/svg/Cat";
+import Dog from "../../../resources/svg/Dog";
 import Duck from "../../../resources/svg/Duck";
 import Sign from "../../../resources/svg/Sign";
 import SignDuck from "../../../resources/svg/SignDuck";
@@ -244,6 +245,8 @@ function EnterRoom() {
                                                     <Cat selectedAnswer={selectedAnswer} />
                                                     : animalConfig.animal === 'Duck' ?
                                                         <Duck />
+                                                        : animalConfig.animal === 'Dog' ?
+                                                        <Dog selectedAnswer={selectedAnswer} />
                                                         : null
                                             }
 
