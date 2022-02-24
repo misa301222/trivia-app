@@ -1,4 +1,4 @@
-import { faDesktop, faNewspaper, faPaw, faPeopleArrows, faQuestion } from "@fortawesome/free-solid-svg-icons";
+import { faDesktop, faGamepad, faNewspaper, faPaw, faPeopleArrows, faQuestion } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
@@ -141,66 +141,79 @@ function Home() {
                 <div className="mt-40">
                     <h1 className="header text-amber-500">Meet your Friends <FontAwesomeIcon icon={faPaw} /></h1>
 
-                    <div className="">
-                        <div className="flex flex-row w-[60%] m-auto">
-                            <div className="w-1/3">
-                                <div className="relative">
-                                    <Cat selectedAnswer={playCatAnimation} />
-                                    {
-                                        playCatAnimation ?
-                                            <motion.div
-                                                className="absolute top-40 left-64"
-                                                initial={{
-                                                    opacity: 0,
-                                                    rotate: 0
-                                                }}
+                    <div className="mt-10">
+                        <div className="bg-neutral-900 p-5 w-10/12 m-auto shadow-md shadow-black">
+                            <p className="font-bold text-slate-300 text-3xl w-1/5 m-auto">Demo <FontAwesomeIcon icon={faGamepad} className='text-red-500' /></p>
+                            <div className="flex flex-row w-[80%] m-auto">
+                                <div className="w-1/3">
+                                    <div className="relative">
+                                        <Cat selectedAnswer={playCatAnimation} />
+                                        {
+                                            playCatAnimation ?
+                                                <motion.div
+                                                    className="absolute top-40 left-64"
+                                                    initial={{
+                                                        opacity: 0,
+                                                        rotate: 0
+                                                    }}
 
-                                                animate={{
-                                                    opacity: 1,
-                                                    rotate: 45
-                                                }}>
-                                                <Sign />
-                                            </motion.div>
-                                            : null
-                                    }
+                                                    animate={{
+                                                        opacity: 1,
+                                                        rotate: 45
+                                                    }}>
+                                                    <Sign />
+                                                </motion.div>
+                                                : null
+                                        }
+                                    </div>
+                                </div>
+                                <div className="w-1/3">
+                                    <div className="relative">
+                                        <Duck />
+                                        {
+                                            playDuckAnimation ?
+                                                <motion.div
+                                                    className="absolute top-40 left-64"
+                                                    initial={{
+                                                        opacity: 0,
+                                                        rotate: 0
+                                                    }}
+
+                                                    animate={{
+                                                        opacity: 1,
+                                                        rotate: 45
+                                                    }}>
+                                                    <SignDuck />
+                                                </motion.div>
+                                                : null
+                                        }
+                                    </div>
+                                </div>
+                                <div className="w-1/3">
+                                    <Dog selectedAnswer={playDogAnimation} />
                                 </div>
                             </div>
-                            <div className="w-1/3">
-                                <div className="relative">
-                                    <Duck />
-                                    {
-                                        playDuckAnimation ?
-                                            <motion.div
-                                                className="absolute top-40 left-64"
-                                                initial={{
-                                                    opacity: 0,
-                                                    rotate: 0
-                                                }}
 
-                                                animate={{
-                                                    opacity: 1,
-                                                    rotate: 45
-                                                }}>
-                                                <SignDuck />
-                                            </motion.div>
-                                            : null
-                                    }
+                            <div className="flex flex-row w-[80%] m-auto">
+                                <div className="w-1/3">
+                                    <button type="button" onClick={() => setPlayCatAnimation(!playCatAnimation)} style={{
+                                        backgroundColor: `${playCatAnimation ? '#f59e0b' : '#cbd5e1'}`
+                                    }} className="btn-secondary">Play</button>
+                                </div>
+                                <div className="w-1/3">
+                                    <button type="button" onClick={() => setPlayDuckAnimation(!playDuckAnimation)} style={{
+                                        backgroundColor: `${playDuckAnimation ? '#f59e0b' : '#cbd5e1'}`
+                                    }} className="btn-secondary">Play</button>
+                                </div>
+                                <div className="w-1/3">
+                                    <button type="button" onClick={() => setPlayDogAnimation(!playDogAnimation)} style={{
+                                        backgroundColor: `${playDogAnimation ? '#f59e0b' : '#cbd5e1'}`
+                                    }} className="btn-secondary">Play</button>
                                 </div>
                             </div>
-                            <div className="w-1/3">
-                                <Dog selectedAnswer={playDogAnimation} />
-                            </div>
-                        </div>
 
-                        <div className="flex flex-row w-[60%] m-auto">
-                            <div className="w-1/3">
-                                <button type="button" onClick={() => setPlayCatAnimation(!playCatAnimation)} className="btn-primary">Play</button>
-                            </div>
-                            <div className="w-1/3">
-                                <button type="button" onClick={() => setPlayDuckAnimation(!playDuckAnimation)} className="btn-primary">Play</button>
-                            </div>
-                            <div className="w-1/3">
-                                <button type="button" onClick={() => setPlayDogAnimation(!playDogAnimation)} className="btn-primary">Play</button>
+                            <div className="mt-20">
+                                <p className="font-bold text-amber-500 text-xl">You can select from over 3 animals who will accompany you in your trivias!</p>
                             </div>
                         </div>
                     </div>

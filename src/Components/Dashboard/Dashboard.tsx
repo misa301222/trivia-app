@@ -1,4 +1,4 @@
-import { faChartLine, faCogs, faComment, faCommentSlash, faCompass, faDoorClosed, faDoorOpen, faEdit, faEye, faHeart, faHeartBroken, faListUl, faNewspaper, faPlusSquare, faQuestion, faStar, faStarHalfAlt, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { faChartLine, faCogs, faComment, faCommentSlash, faCompass, faDoorClosed, faDoorOpen, faEdit, faEye, faHeart, faHeartBroken, faListUl, faNewspaper, faPlusSquare, faQuestion, faStar, faStarHalfAlt, faTrashAlt, faUserEdit } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import moment from "moment";
@@ -294,6 +294,12 @@ function Dashboard() {
                                                         <FontAwesomeIcon icon={faTrashAlt} className='text-red-700 text-xl' />
                                                         : <FontAwesomeIcon icon={faDoorClosed} className='text-orange-400 text-xl' />
                                                     : null
+                                            }
+
+                                            {
+                                                element.category === 'USER PROFILE' ?
+                                                    <FontAwesomeIcon icon={faUserEdit} className='text-cyan-500 text-xl' /> 
+                                                : null
                                             }
 
                                         </div>
