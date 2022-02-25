@@ -2,22 +2,18 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Results from "../Results/Results";
 
-interface Question {
-    questionName: string,
-    firstOption: string,
+interface UserAnswers {
+    question: string,
+    answer: string,
+    isRight: boolean,
+    userScoreId: number,
+    firstoption: string,
     secondOption: string,
     thirdOption: string,
     fourthOption: string,
     fifthOption: string,
     sixthOption: string,
-    answer: string
-    roomId: number
-}
-
-interface UserAnswers {
-    question: string,
-    answer: string,
-    isRight: boolean
+    rightAnswer: string
 }
 
 interface UserScore {
@@ -31,22 +27,18 @@ interface UserScore {
 
 function SeeResults() {
     let location = useLocation();
-    const [questionsFinal, setQuestionsFinal] = useState<Question[]>();
     const [userAnswersFinal, setUserAnswersFinal] = useState<UserAnswers[]>();
     const [userScoreFinal, setUserScoreFinal] = useState<UserScore[]>();
 
     useEffect(() => {
-        let { questions, userAnswersProps, userScore }: any = location?.state;
-        setQuestionsFinal(questions as Question[]);
+        let { userAnswersProps, userScore }: any = location?.state;
         setUserAnswersFinal(userAnswersProps as UserAnswers[]);
         setUserScoreFinal(userScore as UserScore[]);
-        console.log(userScore);
     }, []);
 
-    // TODO, CORREGIR, AL MOMENTO DE AGREGAR UNA PREGUNTA A UN RESULTADO ENVIADO Y CONSULTARLO TRUENA
     return (
         <div>
-            <Results questionsFinal={questionsFinal} userAnswersFinal={userAnswersFinal} userScoreFinal={userScoreFinal} />
+            <Results userAnswersFinal={userAnswersFinal} userScoreFinal={userScoreFinal} />
         </div>
     )
 }

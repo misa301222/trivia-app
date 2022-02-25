@@ -1,10 +1,11 @@
-import { faCogs, faDoorOpen, faEye, faListUl, faPlusSquare, faQuestion, faStar } from "@fortawesome/free-solid-svg-icons";
+import { faChartLine, faCogs, faComment, faCommentSlash, faCompass, faDoorClosed, faDoorOpen, faEdit, faEye, faHeart, faHeartBroken, faListUl, faNewspaper, faPlusSquare, faQuestion, faStar, faStarHalfAlt, faTrashAlt, faUserEdit } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import moment from "moment";
 import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import { ActivityCategory } from "../../constants/enums/ActivityCategory";
 import authService from "../../Services/auth.service";
 import UserCard from "../UserCard/UserCard";
 
@@ -29,9 +30,18 @@ interface UserProfile {
     aboutMeDescription: string
 }
 
+interface Activity {
+    activityId: number,
+    email: string,
+    activityDescription: string,
+    category: string,
+    dateActivity: Date
+}
+
 const RoomURL = 'https://localhost:7025/api/Rooms';
 const UserProfileURL = 'https://localhost:7025/api/UserProfiles';
 const UserScoreURL = 'https://localhost:7025/api/UserScores';
+const ActivitiesURL = 'https://localhost:7025/api/Activities'
 
 function Dashboard() {
     const [user, setUser] = useState<User | null>();
@@ -43,14 +53,13 @@ function Dashboard() {
     const [totalScore, setTotalScore] = useState<number>(0);
     const [totalCorrect, setTotalCorrect] = useState<number>(0);
     const [totalWrong, setTotalWrong] = useState<number>(0);
+    const [activities, setActivities] = useState<Activity[]>();
     const navigate = useNavigate();
 
     const createNewRoom = async () => {
 
         if (user?.email) {
-
             let generatedString: string = Math.random().toString(36).slice(2);
-            console.log(generatedString);
 
             let newRoom: Room = {
                 generatedName: generatedString,
@@ -60,6 +69,18 @@ function Dashboard() {
             await axios.post(`${RoomURL}`, newRoom).then(response => {
                 console.log(response.data);
                 setLastRoomCreated(response.data);
+            });
+
+            let activity: Activity = {
+                activityId: 0,
+                email: authService.getCurrentUser!,
+                activityDescription: ActivityCategory.CREATED_ROOM,
+                category: 'ROOM',
+                dateActivity: new Date()
+            }
+
+            await axios.post(`${ActivitiesURL}/`, activity).then(response => {
+                console.log(response);
             });
 
             setShow(true);
@@ -107,6 +128,12 @@ function Dashboard() {
         });
     }
 
+    const getLastActivities = async (email: string) => {
+        await axios.get(`${ActivitiesURL}/GetActivitiesByEmailDescLast/${email}`).then(response => {
+            setActivities(response.data);
+        })
+    }
+
     const getDetailedInfo = async (email: string) => {
         await axios.get(`${UserScoreURL}/GetTotalScoreByEmail/${email}`).then(response => {
             setTotalScore(response.data);
@@ -126,6 +153,7 @@ function Dashboard() {
         setUser(user);
         getUserProfileInfo(user.email);
         getDetailedInfo(user.email);
+        getLastActivities(user.email);
     }, []);
 
     return (
@@ -137,6 +165,12 @@ function Dashboard() {
 
                 <div className="w-64 h-10 rounded-lg cursor-default shadow-lg shadow-orange-500/50 text-orange-500 bg-neutral-900 ease-in-out duration-300 hover:scale-110 hover:text-cyan-500 hover:shadow-cyan-500/50">
                     <h5 className="pt-1 text-xl font-bold"><FontAwesomeIcon icon={faListUl} /> {user?.roles}</h5>
+                </div>
+
+                <div className="ml-auto mr-40">
+                    <Link to="/explore">
+                        <button className="btn-secondary" type="button"> <FontAwesomeIcon icon={faCompass} className="text-xl" /> Explore</button>
+                    </Link>
                 </div>
             </div>
 
@@ -194,8 +228,92 @@ function Dashboard() {
                 </div>
 
                 <div className="container h-full flex flex-col pl-36">
-                    <UserCard userProfile={userProfile} user={user} totalScore={totalScore} totalCorrect={totalCorrect} totalWrong={totalWrong} />
+                    <div className="mr-auto">
+                        <UserCard userProfile={userProfile} user={user} totalScore={totalScore} totalCorrect={totalCorrect} totalWrong={totalWrong} />
+                    </div>
+
+                    <div className="mt-16">
+                        <div className="w-64 h-10 rounded-lg cursor-default shadow-lg shadow-orange-500/50 text-orange-500 bg-neutral-900 ease-in-out duration-300 hover:scale-110 hover:text-cyan-500 hover:shadow-cyan-500/50">
+                            <h5 className="pt-1 text-xl font-bold"><FontAwesomeIcon icon={faChartLine} /> Recent Activity</h5>
+                        </div>
+
+                        <ul className="mt-10 bg-neutral-900 rounded-lg shadow-black shadow-md w-1/2 mr-auto ml-36 p-2 overflow-y-auto max-h-[16rem]">
+                            {
+
+                                activities?.map((element: Activity, index: number) => (
+                                    <li key={index} className='flex flex-row justify-around p-1'>
+                                        <div className="w-1/3">
+                                            <h5 className="font-bold text-amber-500 text-xl">{element.dateActivity ? moment(element.dateActivity).format('MM/DD/YYYY HH:mm') : null}</h5>
+                                        </div>
+                                        <div className="w-1/3">
+                                            {
+                                                element.category === 'LIKE' ?
+                                                    <FontAwesomeIcon icon={faHeart} className='text-red-700 text-xl' /> :
+                                                    null
+                                            }
+
+                                            {
+                                                element.category === 'UNLIKE' ?
+                                                    <FontAwesomeIcon icon={faHeartBroken} className='text-red-700 text-xl' /> :
+                                                    null
+                                            }
+
+                                            {
+                                                element.category === 'SCORE' ?
+                                                    <FontAwesomeIcon icon={faStarHalfAlt} className='text-yellow-300 text-xl' /> :
+                                                    null
+                                            }
+
+
+                                            {
+                                                element.category === 'POST' ?
+                                                    element.activityDescription === 'Deleted a Post' ?
+                                                        < FontAwesomeIcon icon={faTrashAlt} className='text-emerald-500 text-xl' />
+                                                        :
+                                                        <FontAwesomeIcon icon={faNewspaper} className='text-emerald-500 text-xl' />
+                                                    : null
+                                            }
+
+                                            {
+                                                element.category === 'COMMENT' ?
+                                                    element.activityDescription === 'Deleted a Comment' ?
+                                                        <FontAwesomeIcon icon={faCommentSlash} className='text-white text-xl' />
+                                                        : <FontAwesomeIcon icon={faComment} className='text-white text-xl' />
+                                                    : null
+                                            }
+
+                                            {
+                                                element.category === 'USER POST' ?
+                                                    <FontAwesomeIcon icon={faEdit} className='text-cyan-600 text-xl' />
+                                                    : null
+                                            }
+
+                                            {
+                                                element.category === 'ROOM' ?
+                                                    element.activityDescription === 'Deleted a Room' ?
+                                                        <FontAwesomeIcon icon={faTrashAlt} className='text-red-700 text-xl' />
+                                                        : <FontAwesomeIcon icon={faDoorClosed} className='text-orange-400 text-xl' />
+                                                    : null
+                                            }
+
+                                            {
+                                                element.category === 'USER PROFILE' ?
+                                                    <FontAwesomeIcon icon={faUserEdit} className='text-cyan-500 text-xl' /> 
+                                                : null
+                                            }
+
+                                        </div>
+                                        <div className="w-1/3">
+                                            <h5 className="font-bold text-amber-500 text-xl">{element.activityDescription}</h5>
+                                        </div>
+                                    </li>
+                                ))
+                            }
+                        </ul>
+                    </div>
                 </div>
+
+
             </div>
 
             {

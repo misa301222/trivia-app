@@ -21,6 +21,8 @@ import UserManagment from './Components/User-Managment/UserManagment';
 import NotFound from './Components/Not-Found/NotFound';
 import ManageFeelings from './Components/Feelings/Manage-Feelings';
 import Register from './Components/Register/Register';
+import Explore from './Components/Explore/Explore';
+import EditFavoriteAnimal from './Components/Animal/Edit-Favorite-Animal/EditFavoriteAnimal';
 
 const Wrapper = ({ children }: any) => {
   const location = useLocation();
@@ -61,7 +63,9 @@ function App() {
               <Route path="/seeUserProfile/:email" element={<RequireAuth redirectTo='/login'><div className='page'><SeeUserProfile /></div></RequireAuth>}></Route>
               <Route path="/manageQuestions" element={<RequireAuth redirectTo='/login'><div className='page'><ManageQuestions /></div></RequireAuth>}></Route>
               <Route path="/userManagment" element={<RequireAuth redirectTo='/login'><div className='page'><UserManagment /></div></RequireAuth>}></Route>
-              <Route path="/manageFeelings" element={<RequireAuth redirectTo='/login'><div className='page'><ManageFeelings/></div></RequireAuth>}></Route>              
+              <Route path="/manageFeelings" element={<RequireAuth redirectTo='/login'><div className='page'><ManageFeelings /></div></RequireAuth>}></Route>
+              <Route path="/editFavoriteAnimal" element={<RequireAuth redirectTo='/login'><div className='page'><EditFavoriteAnimal /></div></RequireAuth>}></Route>
+              <Route path="/explore" element={<RequireAuth redirectTo='/login'><div className='page'><Explore /></div></RequireAuth>}></Route>
               <Route path="/logout" element={<div ref={nodeRef} className='page'><Logout /></div>}></Route>
               <Route path="*" element={<div className='page'><NotFound /></div>}></Route>
             </Routes>

@@ -6,6 +6,7 @@ import moment from "moment";
 import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import { ActivityCategory } from "../../constants/enums/ActivityCategory";
 import authService from "../../Services/auth.service";
 
 interface Feeling {
@@ -30,10 +31,19 @@ interface UserLike {
     userPostId: number
 }
 
+interface Activity {
+    activityId: number,
+    email: string,
+    activityDescription: string,
+    category: string,
+    dateActivity: Date
+}
+
 const UserProfileURL = 'https://localhost:7025/api/UserProfiles';
 const FeelingsURL = 'https://localhost:7025/api/Feelings';
 const CommentURL = 'https://localhost:7025/api/Comments'
 const UserLikeURL = 'https://localhost:7025/api/UserLikes'
+const ActivitiesURL = 'https://localhost:7025/api/Activities'
 
 function PostCard({ data }: any) {
     const [imageURL, setImageURL] = useState<string>('');
@@ -122,6 +132,18 @@ function PostCard({ data }: any) {
             console.log(response);
         });
 
+        let activity: Activity = {
+            activityId: 0,
+            email: authService.getCurrentUser!,
+            activityDescription: ActivityCategory.CREATED_COMMENT,
+            category: 'COMMENT',
+            dateActivity: new Date()
+        }
+
+        await axios.post(`${ActivitiesURL}/`, activity).then(response => {
+            console.log(response);
+        });
+
         getCommentsByUserPostId(data.userPostId);
         setNewComment(prev => ({ ...prev, commentContent: '' }))
         setAreCommentsHidden(false);
@@ -147,6 +169,18 @@ function PostCard({ data }: any) {
                         getCommentsByUserPostId(element.userPostId);
                     });
                 });
+
+                let activity: Activity = {
+                    activityId: 0,
+                    email: authService.getCurrentUser!,
+                    activityDescription: ActivityCategory.DELETED_COMMENT,
+                    category: 'COMMENT',
+                    dateActivity: new Date()
+                }
+
+                await axios.post(`${ActivitiesURL}/`, activity).then(response => {
+                    console.log(response);
+                });
             }
         });
     }
@@ -157,6 +191,8 @@ function PostCard({ data }: any) {
             await axios.get(`${UserLikeURL}/GetLikeByEmailAndUserPostId/${email}/${userPostId}`).then(response => {
                 if (response.data) {
                     setIsLiked(true);
+                } else {
+                    setIsLiked(false);
                 }
             });
         }
@@ -176,6 +212,19 @@ function PostCard({ data }: any) {
                 await axios.delete(`${UserLikeURL}/DeleteUserLikeByEmailAndUserPostId/${email}/${userPostId}`).then(response => {
                     setIsLiked(false);
                 });
+
+                let activity: Activity = {
+                    activityId: 0,
+                    email: authService.getCurrentUser!,
+                    activityDescription: ActivityCategory.UNLIKE,
+                    category: 'UNLIKE',
+                    dateActivity: new Date()
+                }
+
+                await axios.post(`${ActivitiesURL}/`, activity).then(response => {
+                    console.log(response);
+                });
+
             } else {
                 let userLike: UserLike = {
                     email: email,
@@ -184,6 +233,18 @@ function PostCard({ data }: any) {
 
                 await axios.post(`${UserLikeURL}/`, userLike).then(response => {
                     setIsLiked(true);
+                });
+
+                let activity: Activity = {
+                    activityId: 0,
+                    email: authService.getCurrentUser!,
+                    activityDescription: ActivityCategory.LIKE,
+                    category: 'LIKE',
+                    dateActivity: new Date()
+                }
+
+                await axios.post(`${ActivitiesURL}/`, activity).then(response => {
+                    console.log(response);
                 });
             }
 
@@ -359,8 +420,11 @@ function PostCard({ data }: any) {
                                                 </div>
 
                                                 <div className="flex flex-col w-full">
+
                                                     <div className="font-bold text-amber-500 ease-in-out duration-300 hover:text-amber-700 cursor-pointer">
-                                                        <h5 className="font-bold text-left">{element.commentedBy}</h5>
+                                                        <Link to={`/seeUserProfile/${element.commentedBy}`}>
+                                                            <h5 className="font-bold text-left">{element.commentedBy}</h5>
+                                                        </Link>
                                                     </div>
 
                                                     <div className="">

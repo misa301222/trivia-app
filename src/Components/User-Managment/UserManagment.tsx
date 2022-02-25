@@ -29,9 +29,25 @@ interface UserProfile {
     aboutMeDescription: string
 }
 
+interface AnimalConfig {
+    animalConfigId: number,
+    email: string,
+    animal: string
+}
+
+interface Activity {
+    activityId: number,
+    email: string,
+    activityDescription: string,
+    category: string,
+    dateActivity: Date
+}
+
 const UserURL = 'https://localhost:7025/api/User';
 const UserProfileURL = 'https://localhost:7025/api/UserProfiles';
 const UserScoreURL = 'https://localhost:7025/api/UserScores';
+const AnimalConfigsURL = 'https://localhost:7025/api/AnimalConfigs';
+const ActivitiesURL = 'https://localhost:7025/api/Activities'
 
 function UserManagment() {
     const [search, setSearch] = useState<string>('');
@@ -98,6 +114,16 @@ function UserManagment() {
 
         let userProfile: UserProfile = newUserProfile;
         userProfile.email = userNew.email;
+
+        let animalConfig: AnimalConfig = {
+            animalConfigId: 0,
+            email: userNew.email,
+            animal: 'None'
+        }
+        await axios.post(`${AnimalConfigsURL}/`, animalConfig).then(response => {
+            console.log(response);
+        });
+
         await axios.post(`${UserProfileURL}`, userProfile).then(response => {
             Swal.fire({
                 position: 'center',
@@ -151,6 +177,18 @@ function UserManagment() {
                 }).catch(err => {
                     console.log(err);
                 });
+
+                await axios.delete(`${ActivitiesURL}/DeleteActivitiesByEmail/${emailDelete}`).then(response => {
+                    console.log(response);
+                }).catch(err => {
+                    console.log(err);
+                });;
+
+                await axios.delete(`${AnimalConfigsURL}/DeleteAnimalConfigByEmail/${emailDelete}`).then(response => {
+                    console.log(response);
+                }).catch(err => {
+                    console.log(err);
+                });;
 
                 Swal.fire({
                     position: 'center',

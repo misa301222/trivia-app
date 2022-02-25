@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import moment from "moment";
 import { ChangeEvent, SyntheticEvent, useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { ActivityCategory } from "../../../constants/enums/ActivityCategory";
 import authService from "../../../Services/auth.service";
 import PaginationPost from "../../PaginationPost/PaginationPost";
 import PostCard from "../../PostCard/PostCard";
@@ -49,12 +50,21 @@ interface Feeling {
     feelingImageURL: string
 }
 
+interface Activity {
+    activityId: number,
+    email: string,
+    activityDescription: string,
+    category: string,
+    dateActivity: Date
+}
+
 const UserProfileURL = 'https://localhost:7025/api/UserProfiles';
 const UserScoresURL = 'https://localhost:7025/api/UserScores';
 const UserURL = 'https://localhost:7025/api/User';
 const RoomURL = 'https://localhost:7025/api/Rooms';
 const UserPostURL = 'https://localhost:7025/api/UserPosts';
 const FeelingsURL = 'https://localhost:7025/api/Feelings';
+const ActivitiesURL = 'https://localhost:7025/api/Activities'
 
 function SeeUserProfile() {
     const { email } = useParams();
@@ -221,6 +231,19 @@ function SeeUserProfile() {
         await axios.get(`${UserPostURL}/GetAllUserPostsByEmail/${email}`).then(response => {
             setUserPosts(response.data);
         });
+
+        let activity: Activity = {
+            activityId: 0,
+            email: authService.getCurrentUser!,
+            activityDescription: ActivityCategory.CREATED_POST,
+            category: 'POST',
+            dateActivity: new Date()
+        }
+
+        await axios.post(`${ActivitiesURL}/`, activity).then(response => {
+            console.log(response);
+        });
+        
     }
 
     useEffect(() => {
@@ -245,7 +268,7 @@ function SeeUserProfile() {
                         y: 100
                     }}
 
-                    whileInView={{
+                    animate={{
                         opacity: 1,
                         y: 0
                     }}
@@ -255,7 +278,8 @@ function SeeUserProfile() {
                     }}
 
                     transition={{
-                        duration: 2,
+                        duration: 3,
+                        delay: 0.3,
                         type: 'spring',
                         bounce: 0.8
                     }}
