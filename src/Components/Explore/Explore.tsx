@@ -4,6 +4,7 @@ import axios from "axios";
 import { motion } from "framer-motion";
 import moment from "moment";
 import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
 interface Room {
@@ -89,27 +90,32 @@ function Explore() {
             <div className="flex flex-wrap mt-20 gap-14 mb-40">
                 {
                     lastRooms?.map((element: Room, index: number) => (
-                        <div key={index} className="h-60 bg-neutral-900 w-56 shadow-md shadow-black cursor-pointer ease-in-out duration-300 hover:scale-110" onClick={() => handleCopiedText(element.generatedName)}>
-                            <div className="flex flex-col justify-center">
-                                <div className=" mt-1">
-                                    <h5 className="font-bold text-xl text-cyan-500">Room Name</h5>
-                                </div>
-                                <div className="mb-4">
-                                    <h5 className="font-bold text-3xl text-slate-300">{element.generatedName}</h5>
-                                </div>
+                        <div key={index}>
+                            <div className="h-60 bg-neutral-900 w-56 shadow-md shadow-black cursor-pointer ease-in-out duration-300 hover:scale-110" onClick={() => handleCopiedText(element.generatedName)}>
+                                <div className="flex flex-col justify-center">
+                                    <div className=" mt-1">
+                                        <h5 className="font-bold text-xl text-cyan-500">Room Name</h5>
+                                    </div>
+                                    <div className="mb-4">
+                                        <h5 className="font-bold text-3xl text-slate-300">{element.generatedName}</h5>
+                                    </div>
 
-                                <div className="mb-2">
-                                    <h5 className="font-bold text-xl">{element.dateCreated ? moment(element.dateCreated).format('MM/DD/YYYY HH:mm') : null}</h5>
-                                </div>
+                                    <div className="mb-2">
+                                        <h5 className="font-bold text-xl">{element.dateCreated ? moment(element.dateCreated).format('MM/DD/YYYY HH:mm') : null}</h5>
+                                    </div>
 
-                                <div className="p-2">
-                                    <h5 className="font-bold text-xl ">By: {element.createdBy}</h5>
-                                </div>
+                                    <div className="p-2">
+                                        <h5 className="font-bold text-xl ">By: {element.createdBy}</h5>
+                                    </div>
 
-                                <div className="mt-1">
-                                    <h5 className="font-bold text-xl text-red-400">Total Questions: {element.questionQuantity}</h5>
+                                    <div className="mt-1">
+                                        <h5 className="font-bold text-xl text-red-400">Total Questions: {element.questionQuantity}</h5>
+                                    </div>
                                 </div>
                             </div>
+                            <Link to={`/enterRoom/${element.generatedName}/${element.roomId}`}>
+                                <button type="button" disabled={element.questionQuantity! <= 0 ? true : false} className="btn-secondary mt-5">Join Room</button>
+                            </Link>
                         </div>
                     ))
                 }
@@ -134,44 +140,49 @@ function Explore() {
             <div className="flex flex-wrap mt-20 gap-14 overflow-y-auto h-[40rem] mb-40 p-5">
                 {
                     rooms?.map((element: Room, index: number) => (
-                        <motion.div
-                            initial={{
-                                opacity: 0
-                            }}
+                        <div key={index}>
+                            <motion.div
+                                initial={{
+                                    opacity: 0
+                                }}
 
-                            animate={{
-                                opacity: 1
-                            }}
+                                animate={{
+                                    opacity: 1
+                                }}
 
-                            whileHover={{
-                                scale: 1.1
-                            }}
+                                whileHover={{
+                                    scale: 1.1
+                                }}
 
-                            transition={{
-                                type: 'spring',
-                            }}
-                            key={index} className="h-60 bg-neutral-900 w-56 shadow-md shadow-black cursor-pointer" onClick={() => handleCopiedText(element.generatedName)}>
-                            <div className="flex flex-col justify-center">
-                                <div className=" mt-1">
-                                    <h5 className="font-bold text-xl text-cyan-500">Room Name</h5>
+                                transition={{
+                                    type: 'spring',
+                                }}
+                                className="h-60 bg-neutral-900 w-56 shadow-md shadow-black cursor-pointer" onClick={() => handleCopiedText(element.generatedName)}>
+                                <div className="flex flex-col justify-center">
+                                    <div className=" mt-1">
+                                        <h5 className="font-bold text-xl text-cyan-500">Room Name</h5>
+                                    </div>
+                                    <div className="mb-4">
+                                        <h5 className="font-bold text-3xl text-slate-300">{element.generatedName}</h5>
+                                    </div>
+
+                                    <div className="mb-4">
+                                        <h5 className="font-bold text-xl">{element.dateCreated ? moment(element.dateCreated).format('MM/DD/YYYY HH:mm') : null}</h5>
+                                    </div>
+
+                                    <div className="p-2">
+                                        <h5 className="font-bold text-xl ">{element.createdBy}</h5>
+                                    </div>
+
+                                    <div className="mt-2">
+                                        <h5 className="font-bold text-xl text-red-400">Total Questions: {element.questionQuantity}</h5>
+                                    </div>
                                 </div>
-                                <div className="mb-4">
-                                    <h5 className="font-bold text-3xl text-slate-300">{element.generatedName}</h5>
-                                </div>
-
-                                <div className="mb-4">
-                                    <h5 className="font-bold text-xl">{element.dateCreated ? moment(element.dateCreated).format('MM/DD/YYYY HH:mm') : null}</h5>
-                                </div>
-
-                                <div className="p-2">
-                                    <h5 className="font-bold text-xl ">{element.createdBy}</h5>
-                                </div>
-
-                                <div className="mt-2">
-                                    <h5 className="font-bold text-xl text-red-400">Total Questions: {element.questionQuantity}</h5>
-                                </div>
-                            </div>
-                        </motion.div>
+                            </motion.div>
+                            <Link to={`/enterRoom/${element.generatedName}/${element.roomId}`}>
+                                <button type="button" className="btn-secondary mt-5" disabled={element.questionQuantity! <= 0 ? true : false}>Join Room</button>
+                            </Link>
+                        </div>
                     ))
                 }
             </div>
